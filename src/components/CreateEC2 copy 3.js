@@ -365,72 +365,186 @@ const handleChange = (e,i) => {
         }
       })
 
-      console.log(array_disk_dynamic)
+
+
+/*
+        switch (server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            server_name_default.current.classList.add('alarm')
+            demand_default.current.classList.add('alarm') 
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (server_name_default.current.value === '' && demand_default.current.value === ''){
+          case true:
+              server_name_default.current.classList.add('alarm')
+              demand_default.current.classList.add('alarm') 
+              return 
+        }
+
+        switch (server_name_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            server_name_default.current.classList.add('alarm')
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (demand_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            demand_default.current.classList.add('alarm') 
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (server_name_default.current.value  === ''){
+          case true:
+            server_name_default.current.classList.add('alarm') 
+            return 
+        }
+
+        
+        switch (demand_default.current.value  === ''){
+          case true:
+            demand_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (disk_default.current.value === ''){
+          case true:
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+
+
+        switch (array_disk_dynamic.length > 0){
+          case true:
+            array_disk_dynamic.map((item,index) => {
+              if(item.value === ''){
+                 document.getElementById(`dynamic${index}`).classList.add('alarm')
+                 return 
+              } 
+            })
+
+          }
+          return 
+        }
+
+        dispatch({type:"ADD_EC2",payload:newEC2})
+        $('#form_modal').modal('hide')
+*/
+
+
+
+
+
+
       if(server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
         server_name_default.current.classList.add('alarm')
         demand_default.current.classList.add('alarm') 
         disk_default.current.classList.add('alarm') 
         return 
+      }
         
-      } else if(server_name_default.current.value === '' && demand_default.current.value === ''){
+     if(server_name_default.current.value === '' && demand_default.current.value === ''){
         server_name_default.current.classList.add('alarm')
         demand_default.current.classList.add('alarm') 
         return 
-      } else if(server_name_default.current.value === '' && disk_default.current.value === ''){
+      }
+      if(server_name_default.current.value === '' && disk_default.current.value === ''){
         server_name_default.current.classList.add('alarm')
         disk_default.current.classList.add('alarm') 
         return 
-      }else if(demand_default.current.value === '' && disk_default.current.value === ''){
+      }
+      if(demand_default.current.value === '' && disk_default.current.value === ''){
         demand_default.current.classList.add('alarm') 
         disk_default.current.classList.add('alarm') 
         return 
-      }else if(server_name_default.current.value  === ''){
+      }
+      if(server_name_default.current.value  === ''){
         server_name_default.current.classList.add('alarm') 
         return 
-      } else if(demand_default.current.value  === ''){
+       }
+      if(demand_default.current.value  === ''){
         demand_default.current.classList.add('alarm') 
         return 
-      }else if(disk_default.current.value === ''){
+      }
+      if(disk_default.current.value === ''){
         disk_default.current.classList.add('alarm') 
         return 
-      } else if(array_disk_dynamic.length > 0){
+      }
+      
+
+      if(array_disk_dynamic.length === 0){
+        dispatch({type:"ADD_EC2",payload:newEC2})
+        $('#form_modal').modal('hide')
+
+        //送出到前端table list後，form回復預設值
+          
+        server_name_default.current.value = ''
+        os_default.current.value = 'ami-006e00d6ac75d2ebb'
+        resource_default.current.value = 't1.micro'
+        subnet_default.current.value = 'A'
+        disk_default.current.value = 30
+
+        
+        setOS('ami-006e00d6ac75d2ebb')
+        setResource('t1.micro')
+        setSubnet('A')
+        setIp(false)
+        setDisk(30)
+        setCounter([])
+        if(query2.npage >= 1){ 
+          setTriggerNext((triggerNext) => triggerNext + 1);
+    
+          }   
+     
+      }
+
+
+
+      
+      if(array_disk_dynamic.length > 0){
         array_disk_dynamic.map((item,index) => {
           if(item.value === ''){
              document.getElementById(`dynamic${index}`).classList.add('alarm')
+             return null
           } 
-         
-        })
-       
-      } else {
-        dispatch({type:"ADD_EC2",payload:newEC2})
-        $('#form_modal').modal('hide')
-      
-      }
 
+
+          if(item.value !== ''){
+            dispatch({type:"ADD_EC2",payload:newEC2})
+            $('#form_modal').modal('hide')
+
+          //送出到前端table list後，form回復預設值
+            
+          server_name_default.current.value = ''
+          os_default.current.value = 'ami-006e00d6ac75d2ebb'
+          resource_default.current.value = 't1.micro'
+          subnet_default.current.value = 'A'
+          disk_default.current.value = 30
+
+          
+          setOS('ami-006e00d6ac75d2ebb')
+          setResource('t1.micro')
+          setSubnet('A')
+          setIp(false)
+          setDisk(30)
+          setCounter([])
+          if(query2.npage >= 1){ 
+            setTriggerNext((triggerNext) => triggerNext + 1);
+      
+            }   
+        } 
  
-
-
-
-      //送出到前端table list後，form回復預設值
-     
-      server_name_default.current.value = ''
-      os_default.current.value = 'ami-006e00d6ac75d2ebb'
-      resource_default.current.value = 't1.micro'
-      subnet_default.current.value = 'A'
-      disk_default.current.value = 30
-
+      })
       
-      setOS('ami-006e00d6ac75d2ebb')
-      setResource('t1.micro')
-      setSubnet('A')
-      setIp(false)
-      setDisk(30)
-      setCounter([])
 
-      if(query2.npage >= 1){ 
-        setTriggerNext((triggerNext) => triggerNext + 1);
+  }
+   
+       
 
-      }
     
     };
 

@@ -1,27 +1,49 @@
-import React from 'react'
-
+import React,{ Component } from 'react'
+import { OverlayTrigger,Popover } from 'react-bootstrap';
 
 import data from './adjust_format.json'
 import { AiFillCheckSquare  } from "react-icons/ai";
 import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
+import {GrStorage} from "react-icons/gr";
 import {encryptStorage1} from '../App'
-const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
-   
-
-
-    let new_OS = data[0][OS]
-    let new_RESOURCE= data[1][RESOURCE]
+//import $ from 'jquery'; 
+const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
+  
     
+  let new_OS = data[0][OS]
+  let new_RESOURCE= data[1][RESOURCE]
+
+
+  let the_counter = COUNTER.map((item,index) => {
+    return `硬碟${index+2}:${item.EC2_disk}GB `
+  })
+
+  console.log(the_counter)
+
+  let the_counter2 = the_counter.join('\n')
+
+  console.log(the_counter2)
+  let popover = (
+    <Popover>
+      <Popover.Body>
+      <div>硬碟1:{DISK}GB</div>
+      <div className='the_newline'>{the_counter}</div>
+      </Popover.Body>
+    </Popover>
+  );
 
 
 
+  
+
+  
+    
+ 
 
     return <>
           <tr>
-              {/* <th scope="row">
-                  {DEMAND}
-             </th> */}
+     
 
               <td>{DEMAND}</td>
               <td>{encryptStorage1.getItem('query5').cn}</td>
@@ -29,14 +51,28 @@ const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,APPLY_DATE,SUBNET,IP,dele
               <td>{EC2NAME}</td>
               <td>{new_OS}</td>
               <td>{new_RESOURCE}</td>
+              <td>
+             
+              <OverlayTrigger trigger="focus" placement="right" overlay={popover}>
+                  <button className="storage">
+                  {<GrStorage />}   
+                  </button>
+                  
+               
+              </OverlayTrigger>
+
+            
+             
+              </td>
+
               <td>{SUBNET}</td>
               {IP === true ? 
 
-              <td><AiFillCheckSquare /></td>
-              :<td><MdOutlineDangerous /></td>
+              <td><AiFillCheckSquare className='ip_svg'/></td>
+              :<td><MdOutlineDangerous className='ip_svg'/></td>
             }
       
-
+            
      
              <td className="nav-item dropdown">
                     <a className="" href="#/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

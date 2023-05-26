@@ -6,11 +6,11 @@ import {VscChevronLeft,VscChevronRight} from "react-icons/vsc";
 
 
 
-const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious}) => {
+const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious,counter}) => {
 
 
   const receiveData = useContext(EC2Context)
-  
+  console.log(receiveData)
   const [currentPage,setCurrentPage] = useState(1)
   const recordsPerPage = 5
   
@@ -19,7 +19,7 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
   const records = receiveData.allEC2.slice(firstIndex,lastIndex)
   const npage = Math.ceil(receiveData.allEC2.length / recordsPerPage)
   //const numbers = [...Array(npage + 1).keys()].slice(1) //最後是array，如果npage=5，結果是[1,2,3,4,5]
- 
+  console.log(counter)
   let data = {
     currentPage:currentPage,
     recordsPerPage:recordsPerPage,
@@ -114,9 +114,10 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
               <th scope="col">需求單單號</th>
               <th scope="col">申請人</th>
               <th scope="col">申請人部門</th>
-              <th scope="col">雲端主機名稱</th>
-              <th scope="col">雲端主機作業系統</th>
-              <th scope="col">雲端主機規格</th>
+              <th scope="col">主機名稱</th>
+              <th scope="col">主機作業系統</th>
+              <th scope="col">主機規格</th>
+              <th scope="col">主機硬碟</th>
               <th scope="col">網段</th>
               <th scope="col">對外IP</th>
               <th scope="col">進階</th>
@@ -125,7 +126,7 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious})
           <tbody>
 
                 {records.map((ec2,index) => {
-          
+                      console.log(ec2)
                       return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2} editEC2={editEC2} />
                     
                     

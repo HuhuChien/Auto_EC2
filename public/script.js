@@ -11,3 +11,10 @@
 // })
 
 
+
+
+// setTimeout((function() { 
+  
+//     $('[data-toggle="popover"]').popover();
+//   }),1000);
+

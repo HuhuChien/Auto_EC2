@@ -24,7 +24,7 @@ const Login = ({setLog_in,setQuery4,setQuery5}) => {
         //let bytes = AES.decrypt(ad_info,'abbbabadbadbbda')
         //setQuery5(JSON.parse(bytes.toString(CryptoJS.enc.Utf8)))
         setQuery5(ad_info)
-    },[ad_info,setQuery4,,setQuery5]) //要再確認是否要放setQuery4、setQuery5
+    },[ad_info,setQuery4,setQuery5]) //要再確認是否要放setQuery4、setQuery5
 
 
   

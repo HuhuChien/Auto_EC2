@@ -12,25 +12,28 @@ import Search from './Search';
 import Logout from './Logout';
 import ClipLoader from "react-spinners/ClipLoader";
 import {encryptStorage1} from '../App'
-//import $ from 'jquery'; 
+import $ from 'jquery'; 
 
 
 
 export const EC2Context = React.createContext()
 
 
-const CreateEC2 = ({setQuery,query4}) => {
+const CreateEC2 = ({setQuery}) => {
   const [theId,setTheid] = useState('')
   const [demand,setDemand] = useState('')
   const [ec2Name,setEc2Name] = useState('')
   const [os,setOS] = useState('ami-006e00d6ac75d2ebb')
+  const [disk,setDisk] = useState(30)
   const [resource,setResource] = useState('t1.micro')
   const [subnet,setSubnet] = useState('A')
   const [ip,setIp] = useState(false)
   const [edit,setEdit] = useState(false)
   const [loading,setLoading] = useState(false)
+  const [counter, setCounter] = useState([])
   const [query2,setQuery2] = useState('')
   const [query3,setQuery3] = useState([])
+ 
   const [triggerNext, setTriggerNext] = useState(0);
   const [triggerPrevious, setTriggerPrevious] = useState(0);
   const [loggin_user,set_Loggin_user] = useState('')
@@ -38,14 +41,18 @@ const CreateEC2 = ({setQuery,query4}) => {
 
   const demand_default = useRef(null)
   const server_name_default = useRef(null)
-  const subnet_default = useRef(null)
   const os_default = useRef(null)
+  const disk_default = useRef(null)
+
   const resource_default = useRef(null)
+  const subnet_default = useRef(null)
   const check_default = useRef(null)
   const search_default = useRef(null)
   const spinner_default = useRef(null)
 
   
+  //let a = Array.from(Array(counter))
+
 
   let defaultState = {
     allEC2: [],
@@ -95,7 +102,6 @@ const CreateEC2 = ({setQuery,query4}) => {
   },[state.allEC2,setQuery,state])
  
 
-  
 
 
 
@@ -114,11 +120,21 @@ const CreateEC2 = ({setQuery,query4}) => {
       setOS(e.target.value)
       console.log(e.target.value)
   }
+
+  const disk_ChangeHandler = (e) => {
+  
+    setDisk(e.target.value)
+    
+   
+    console.log(e.target.value)
+}
   
   const instance_type_ChangeHandler = (e) => {
       setResource(e.target.value)
       console.log(e.target.value)
   }
+
+
   
  
 
@@ -126,7 +142,7 @@ const CreateEC2 = ({setQuery,query4}) => {
    
     setSubnet(e.target.value)
     
-    if(subnet != 'DMZ1' || subnet != 'DMZ2'){
+    if(subnet !== 'DMZ1' || subnet !== 'DMZ2'){
       setIp(false)
     }
 
@@ -141,17 +157,58 @@ const CreateEC2 = ({setQuery,query4}) => {
   setIp(!ip)
 }
 
+//增加硬碟欄位
+const handle_Add_Disk = (e) => {
+  e.preventDefault()
+  setCounter([...counter,{}]);
+  console.log(counter)
+};
+
+
+
+
+//減少硬碟欄位
+const handle_Remove_Disk = (e,index) => {
+  e.preventDefault()
+  console.log(index)
+  const deleteVal = [...counter]
+  console.log(deleteVal)
+  deleteVal.splice(index,1)
+  setCounter(deleteVal)
+
+};
+
+//硬碟input欄位內容
+const handleChange = (e,i) => {
+ 
+  const {name,value} = e.target
+  const onChangeVal = [...counter]
+  console.log(onChangeVal)
+  onChangeVal[i][name] = value
+
+  setCounter(onChangeVal)
+}
+
+
+
+
+
+
+
 //取消按鈕
   const cancel = (e) => {
     //檢查欄位是否填完整
     server_name_default.current.classList.remove('alarm')
     demand_default.current.classList.remove('alarm') 
+    disk_default.current.classList.remove('alarm') 
     //要將表格欄位回復預設值
     demand_default.current.value = demand
     server_name_default.current.value = ''
     os_default.current.value = 'ami-006e00d6ac75d2ebb'
     resource_default.current.value = 't1.micro'
     subnet_default.current.value = 'A'
+    disk_default.current.value = 30
+
 
     //要將state回復預設值
     setEdit(false)
@@ -160,7 +217,8 @@ const CreateEC2 = ({setQuery,query4}) => {
     setResource('t1.micro')
     setSubnet('A')
     setIp(false)
-
+    setDisk(30)
+    setCounter([])
 
 }
 
@@ -267,12 +325,13 @@ const CreateEC2 = ({setQuery,query4}) => {
   //儲存按鈕
   const handle_Submit = (e) => {
       e.preventDefault();
-      server_name_default.current.classList.remove('alarm')
-      demand_default.current.classList.remove('alarm') 
+  
       const newEC2 = {
         ID:uuidv4(),
         DEMAND:demand,
         EC2NAME:ec2Name,
+        DISK:disk,
+        COUNTER:counter,
         OS: os,
         RESOURCE: resource,
         SUBNET:subnet,
@@ -280,61 +339,194 @@ const CreateEC2 = ({setQuery,query4}) => {
         APPLY_DATE: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
       } 
 
-      console.log(newEC2)
+      //找出額外新增的硬碟
+      let array_disk_dynamic = document.getElementsByClassName('EC2_disk_dynamic')
+      array_disk_dynamic = Object.values(array_disk_dynamic)
 
-      if(server_name_default.current.value === '' && demand_default.current.value === ''){
+      //先將紅色告警消除
+      server_name_default.current.classList.remove('alarm')
+      demand_default.current.classList.remove('alarm') 
+      disk_default.current.classList.remove('alarm')
+      array_disk_dynamic.map((item,index) => {
+        if(item.value !== ''){
+          return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+          
+        }
+        
+      })
+
+
+   
+     
+      //額外硬碟沒有填寫的欄位，增加紅色告警
+      array_disk_dynamic.map((item,index) => {
+        if(item.value === ''){
+          return document.getElementById(`dynamic${index}`).classList.add('alarm')
+        }
+      })
+
+
+
+/*
+        switch (server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            server_name_default.current.classList.add('alarm')
+            demand_default.current.classList.add('alarm') 
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (server_name_default.current.value === '' && demand_default.current.value === ''){
+          case true:
+              server_name_default.current.classList.add('alarm')
+              demand_default.current.classList.add('alarm') 
+              return 
+        }
+
+        switch (server_name_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            server_name_default.current.classList.add('alarm')
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (demand_default.current.value === '' && disk_default.current.value === ''){
+          case true:
+            demand_default.current.classList.add('alarm') 
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (server_name_default.current.value  === ''){
+          case true:
+            server_name_default.current.classList.add('alarm') 
+            return 
+        }
+
+        
+        switch (demand_default.current.value  === ''){
+          case true:
+            demand_default.current.classList.add('alarm') 
+            return 
+        }
+
+        switch (disk_default.current.value === ''){
+          case true:
+            disk_default.current.classList.add('alarm') 
+            return 
+        }
+
+
+
+        switch (array_disk_dynamic.length > 0){
+          case true:
+            array_disk_dynamic.map((item,index) => {
+              if(item.value === ''){
+                 document.getElementById(`dynamic${index}`).classList.add('alarm')
+                 return 
+              } 
+            })
+
+          }
+          return 
+        }
+
+        dispatch({type:"ADD_EC2",payload:newEC2})
+        $('#form_modal').modal('hide')
+*/
+
+
+
+
+
+
+      if(server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
         server_name_default.current.classList.add('alarm')
         demand_default.current.classList.add('alarm') 
-        return
-      } else if(server_name_default.current.value === ''){
-        return  server_name_default.current.classList.add('alarm')
+        disk_default.current.classList.add('alarm') 
         
-    
-      } else if(demand_default.current.value  === ''){
-        return demand_default.current.classList.add('alarm') 
-       
-      } else {
-        dispatch({type:"ADD_EC2",payload:newEC2})
-        server_name_default.current.classList.remove('alarm')
-        demand_default.current.classList.remove('alarm') 
+      }
+        
+     if(server_name_default.current.value === '' && demand_default.current.value === ''){
+        server_name_default.current.classList.add('alarm')
+        demand_default.current.classList.add('alarm') 
+      
+      }
+      if(server_name_default.current.value === '' && disk_default.current.value === ''){
+        server_name_default.current.classList.add('alarm')
+        disk_default.current.classList.add('alarm') 
 
       }
-
+      if(demand_default.current.value === '' && disk_default.current.value === ''){
+        demand_default.current.classList.add('alarm') 
+        disk_default.current.classList.add('alarm') 
       
+      }
+      if(server_name_default.current.value  === ''){
+        server_name_default.current.classList.add('alarm') 
+        return 
+       }
+      if(demand_default.current.value  === ''){
+        demand_default.current.classList.add('alarm') 
+        return 
+      }
+      if(disk_default.current.value === ''){
+        disk_default.current.classList.add('alarm') 
+        return 
+      }
+      
+
+      if(array_disk_dynamic.length > 0){
+        array_disk_dynamic.map((item,index) => {
+          if(item.value === ''){
+             document.getElementById(`dynamic${index}`).classList.add('alarm')
+             return null
+          }
+   
+      })
+      
+      //return null //可以做dynamic空值檢查，但無法最後按儲存，如果刪除這行，user沒輸入dynamic input，
+      //會是dynamic input的輸出內容會是undefied
+    }
+   
+      dispatch({type:"ADD_EC2",payload:newEC2})
+      $('#form_modal').modal('hide')
+
       //送出到前端table list後，form回復預設值
-     
+        
       server_name_default.current.value = ''
       os_default.current.value = 'ami-006e00d6ac75d2ebb'
       resource_default.current.value = 't1.micro'
       subnet_default.current.value = 'A'
-  
+      disk_default.current.value = 30
+
       
       setOS('ami-006e00d6ac75d2ebb')
       setResource('t1.micro')
       setSubnet('A')
       setIp(false)
-      window.$('#form_modal').modal('hide')
-
-
-      if(query2.npage >= 1){
-      
+      setDisk(30)
+      setCounter([])
+      if(query2.npage >= 1){ 
         setTriggerNext((triggerNext) => triggerNext + 1);
-
-      }
-    
+      }   
     };
 
 
+    
 
 
 
-  //送出按鈕
+
+
+  //送出按鈕(資料庫)
   const handle_Submit_DB =async(e) => {
     try{
       axios.defaults.withCredentials = true //一定要有這行，解決reload後，無法送出問題
       await setDisabled(true)
        for (const[i,value] of state.allEC2.entries()){
         let payload = state.allEC2
+        console.log(payload)
         const url = 'http://localhost:5020/task'
       await axios.post(url,{
           demand:payload[i].DEMAND,
@@ -400,7 +592,7 @@ const CreateEC2 = ({setQuery,query4}) => {
 
   
   
-  console.log(encryptStorage1.getItem('query5'))
+  //console.log(encryptStorage1.getItem('query5'))
   return <>
     <EC2Context.Provider value={state} >
         
@@ -423,13 +615,13 @@ const CreateEC2 = ({setQuery,query4}) => {
           {edit ? <EditEC2Form demand_default={demand_default} server_name_default={server_name_default} 
           os_default={os_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler}
           ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
-            ip_ChangeHandler={ip_ChangeHandler} cancel={cancel} handle_Update={handle_Update} subnet={subnet}/> 
+            ip_ChangeHandler={ip_ChangeHandler}  cancel={cancel} handle_Update={handle_Update} subnet={subnet}/> 
             
-            : <EC2Form demand={demand} demand_default={demand_default} server_name_default={server_name_default} os_default={os_default}  
+            : <EC2Form  demand={demand} demand_default={demand_default} server_name_default={server_name_default} os_default={os_default} disk_default={disk_default}
             resource_default={resource_default} subnet_default={subnet_default} check_default={check_default}
-            demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
+            demand_ChangeHandler={demand_ChangeHandler} ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} disk_ChangeHandler={disk_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
             subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler} 
-            cancel={cancel} handle_Submit={handle_Submit} subnet={subnet}/>}
+            cancel={cancel} handle_Submit={handle_Submit} subnet={subnet} counter={counter} handle_Add_Disk={handle_Add_Disk} handle_Remove_Disk={handle_Remove_Disk} handleChange={handleChange}/>}
             
             <Search deleteEC2={deleteEC2} editEC2={editEC2} setQuery3={setQuery3} triggerNext={triggerNext} triggerPrevious={triggerPrevious} search_default={search_default}/>
             
@@ -438,7 +630,7 @@ const CreateEC2 = ({setQuery,query4}) => {
             
             
             state.allEC2.length > 0 ? 
-              <EC2TableList deleteEC2={deleteEC2} editEC2={editEC2} setQuery2={setQuery2} triggerNext={triggerNext} triggerPrevious={triggerPrevious}/>
+              <EC2TableList deleteEC2={deleteEC2} editEC2={editEC2} setQuery2={setQuery2} triggerNext={triggerNext} triggerPrevious={triggerPrevious} counter={counter}/>
               :
               <EmptyTableList />}
            {loading && <div className="clip_loader"  ref={spinner_default}><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}

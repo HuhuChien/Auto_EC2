@@ -1,15 +1,21 @@
-import React,{useContext,useState} from 'react'
+import React,{useContext,useEffect,useState} from 'react'
 import { EC2Context } from './CreateEC2'
 import {encryptStorage1} from '../App'
 //import $ from 'jquery'; 
 
 
-const EC2Form = ({demand,demand_default,server_name_default,os_default,resource_default,subnet_default,check_default,
-  demand_ChangeHandler,ec2_Name_ChangeHandler,os_ChangeHandler,instance_type_ChangeHandler,handle_Submit,
-  cancel,ip_ChangeHandler,subnet_ChangeHandler,subnet}) => {
+const EC2Form = ({demand,demand_default,server_name_default,os_default,disk_default,resource_default,subnet_default,check_default,
+  demand_ChangeHandler,ec2_Name_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Submit,
+  cancel,ip_ChangeHandler,subnet_ChangeHandler,subnet,counter,handle_Add_Disk,handle_Remove_Disk,handleChange}) => {
 
 const receiveData = useContext(EC2Context)
-console.log(receiveData)
+//console.log(receiveData)
+
+
+useEffect(() => {
+  console.log(disk_default)
+  disk_default.current.value = 30
+},[])
 
 
 
@@ -24,11 +30,12 @@ console.log(receiveData)
         
         <div className="modal-dialog modal-lg">
           <div className="modal-content the_modal-content">
-          <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
+          <button data-dismiss="modal" className="close" type="button" onClick={cancel}>
               <span aria-hidden="true">&times;</span>
           </button>
+           
               <form className="form" method="POST" id="the_form" onSubmit={handle_Submit}>
-    
+       
                       <div className="form-row the_form-row">
                         <div className="form-group the_form-group">
                           <label htmlFor="user_displayName">申請人</label>
@@ -64,26 +71,64 @@ console.log(receiveData)
 
                       <div className="form-row the_form-row">
                         <div className="form-group  the_form-group">
-                          <label htmlFor="EC2_name">雲端主機名稱</label>
+                          <label>主機名稱</label>
                           <input type="text" name="EC2_name" className="form-control" id="EC2_name" onChange={ec2_Name_ChangeHandler} ref={server_name_default}/>
                         </div>
                       </div>                 
 
                       <div className="form-row the_form-row">
                         <div className="form-group  the_form-group">
-                          <label htmlFor="ami">雲端主機作業系統</label>
+                          <label>主機作業系統</label>
                           <select name="ami" id="ami" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
                             <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
                             <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
                             <option value="ami-00c39f71452c08778">Amazon Linux 2023 </option>
+                            <option value="ami-0e515107fd2bcc7fe">Windows Server 2019 </option>
                           </select>
                         </div>
+                      </div>
+
+
+                      <div className="form-row the_form-row">
+                        <div className="form-group the_form-group disk-1">
+                          <button onClick={handle_Add_Disk} className="add_disk">新增硬碟</button>
+                          <label>主機硬碟1</label>
+                          <div className='d-flex'>
+                            <input type="number" name='EC2_disk' onChange={disk_ChangeHandler} ref={disk_default} className="form-control" id="EC2_disk" min="8"/> 
+                            <div className='gb'>GB</div> 
+                          </div>
+                        </div>           
+                      </div>  
+
+                  {counter.map((c, index) => 
+                    
+                          <div className='form-row the_form-row '  key={index}>
+                            <div className="form-group the_form-group dynamic_disk" >
+                              
+                            <button onClick={(e) => handle_Remove_Disk(e,index)} className="remove_disk" >移除硬碟{index+2}</button>
+                                    <label>主機硬碟{index + 2}</label>
+                                    <div className='d-flex'>
+                                        <input type="number" name="EC2_disk"  value={c.EC2_disk} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                        <div className='gb'>GB</div> 
+                                    </div>
+                              
+                                
+                             
+                                
+                               
+                                
+                            </div> 
+                          </div>
                       
-                      </div>
+                     
+
+                    )}
+                    
+
                       <div className="form-row the_form-row">
                         <div className="form-group the_form-group">
-                          <label htmlFor="instance_type">雲端主機規格</label>
-                          <select name="subnet" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
+                          <label>主機規格</label>
+                          <select name="instance_type" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
                               <option value="t1.micro">1vCPU 0.612GB Mem</option>
                               <option value="t2.nano">1vCPU 0.5GB Mem</option>
                               <option value="t2.micro">1vCPU 1GB Mem</option>
@@ -93,17 +138,7 @@ console.log(receiveData)
                       </div>
 
 
-                      <div className="form-row the_form-row">
-                        <div className="form-group the_form-group">
-                          <label htmlFor="instance_type">雲端主機磁碟</label>
-                          <select name="subnet" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
-                              <option value="t1.micro">1vCPU 0.612GB Mem</option>
-                              <option value="t2.nano">1vCPU 0.5GB Mem</option>
-                              <option value="t2.micro">1vCPU 1GB Mem</option>
-                          </select>
-                        </div>
-                    
-                      </div>
+             
 
                       <div className="form-row the_form-row">
                         <div className="form-group the_form-group">
@@ -121,9 +156,9 @@ console.log(receiveData)
           
                       </div>
                      
-                      
+                       
                       {(subnet === 'DMZ1' || subnet === 'DMZ2') &&
-                      <div className="form-row">
+                      <div className="form-row the_form-row">
                         <div className="form-group col-md-4">
                           <div className="form-check">
                               
@@ -136,13 +171,13 @@ console.log(receiveData)
                     
 
                       </div>
-                    }
+                    } 
             
-                      <div className="button-group">
+                     <div className="button-group">
                         <button type="submit" id="save" className="btn btn-primary">儲存</button>
-                        <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={cancel}>取消</button>
 
-                      </div>
+                      </div> 
                       
               </form>
           </div>

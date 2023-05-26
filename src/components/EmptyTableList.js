@@ -8,9 +8,10 @@ const EmptyTableList = () => {
               <th scope="col">需求單單號</th>
               <th scope="col">申請人</th>
               <th scope="col">申請人部門</th>
-              <th scope="col">雲端主機名稱</th>
-              <th scope="col">雲端主機作業系統</th>
-              <th scope="col">雲端主機規格</th>
+              <th scope="col">主機名稱</th>
+              <th scope="col">主機作業系統</th>
+              <th scope="col">主機規格</th>
+              <th scope="col">主機硬碟</th>
               <th scope="col">網段</th>
               <th scope="col">對外IP</th>
               <th scope="col">進階</th>
