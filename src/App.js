@@ -35,8 +35,7 @@ const App = () => {
     async function keepIt(){
      
       let log_in_result = await JSON.parse(sessionStorage.getItem('log_In'))
-      console.log(log_in_result)
-      console.log(location)
+      
       await setLog_in(log_in_result)
       if(location.pathname === '/create_ec2'){
         return  navigate('/create_ec2')

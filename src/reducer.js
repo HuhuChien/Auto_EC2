@@ -5,13 +5,6 @@ const reducer = (state,action) => {
         return {...state,allEC2:newEC2_list} //先抓出全部的state內容後，再去更新allEC2
 
     } 
-    //應該用不到了
-    // if(action.type === 'SUBNET_UPDATE'){
-    //     console.log(action)
-    //     const update_subnet = action.payload
-    //     return {...state,subnet:update_subnet} 
-
-    // } 
 
     if(action.type === 'DELETE_EC2'){
       

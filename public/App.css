@@ -1,6 +1,4 @@
-
-
-
+/* Navgar和Search */
 .the_navbar{
     margin-top: 1.5rem;
     width:100%;
@@ -29,6 +27,7 @@
 
 }
 
+/* 「開始建立主機」、「送出」按鈕 */
 
 .main {
   
@@ -46,7 +45,7 @@
 
 }  
 
-
+/* 新建雲端主機-無資料 */
 .no-data-parent{
     position: relative;
 }
@@ -58,19 +57,32 @@
     transform: translateX(-50%);
 }
 
-.the_modal-content{
+
+
+/* User的Form */
+.the-modal-content{
    height: auto;
-
+   position: relative;
 }
 
-#the_form {
+
+
+.close{
+    width:30px;
+    position: absolute;
+    right:10px;
+}
+
+
+.wrapper {
+    display: grid;
     margin:2.5rem;
-    display: flex;
-    flex-wrap:wrap;
-    justify-content:space-between
+    margin-bottom:5rem;
  
-}
+    grid-template-columns: repeat(3, 1fr);
+    position: relative;
 
+}
 
 
 .form-row{
@@ -85,18 +97,6 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
    display: flex;
    align-items: center;
 } 
-
-
-.button-group{
-    text-align: center;
-    width: 100%;
-    margin-top: 40px;
-}
-
-
-
-
-
 
 
 .form-control:focus {
@@ -129,18 +129,26 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
     padding:0;
 }
 
-
-
-
-
-
-.alarm{
-    border-color: red;
-}
-
 .button-group > .btn-secondary{
     margin-left:2rem;
 
+} 
+
+
+
+.button-group{
+    margin:auto; 
+    width:100%;
+    position: absolute;
+    bottom:-60px;
+    text-align: center;
+}
+
+
+/* User的Form check */
+
+.alarm{
+    border-color: red;
 }
 
 .form-check{
@@ -151,17 +159,33 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
     margin-left: 2rem;
 }
 
+
+
+
+
+
+/* 第X頁/共X頁(共X筆) */
 .page ul {
     float:right;
     font-size:13px;
-}
+} 
 
 
 
 
 
+/* table */
 
- .table.create{
+
+table th,
+table td {
+  /* font-size:10px; */
+  text-align: center;
+} 
+
+
+
+.table.create{
     margin-top:2.8rem;
 
 } 
@@ -179,13 +203,6 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
 */
 
 
-table th,
-table td {
-  /* font-size:10px; */
-  text-align: center;
-} 
-
-
 .storage{
     border: none; 
     background-color: #fff;
@@ -200,6 +217,12 @@ table td {
 .ip_svg{
     transform: translate(0, -2px)
 }
+
+
+
+
+
+/* Loader */
 
  .clip_loader {
 
@@ -223,6 +246,10 @@ table td {
    
 
 }  
+
+
+
+/* 檢視申請內容 */
 .apply_container{
     position: relative;  
 
@@ -261,6 +288,8 @@ table td {
     outline: none;
 } 
 
+
+/* 後台管理 */
 #demand_save_backend{
     height: 54px;
     width: 94px;
@@ -270,6 +299,8 @@ table td {
     cursor: pointer;
     outline: none;
 } 
+
+/* 右上角AD資訊 */
 
 .bar_ad_settings{
     position: absolute;
@@ -287,6 +318,10 @@ table td {
     padding: 0;
 
   }
+
+
+  /* Footer */
+
 
 .before-footer-space{
     min-height: 20vh;
@@ -309,7 +344,7 @@ table td {
 
 
 
-
+/* RWD */
 @media screen and (min-width:766px) and (max-width:995px){ 
     .search{
         top:45px;
@@ -347,7 +382,7 @@ table td {
   }  
 
 
-  /* input的數字不要有箭頭->Chrome, Safari, Edge, Opera */ 
+/* input的數字不要有箭頭->Chrome, Safari, Edge, Opera */ 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

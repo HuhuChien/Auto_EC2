@@ -1,4 +1,4 @@
-import React,{ Component } from 'react'
+import React from 'react'
 import { OverlayTrigger,Popover } from 'react-bootstrap';
 
 import data from './adjust_format.json'
@@ -10,20 +10,14 @@ import {encryptStorage1} from '../App'
 //import $ from 'jquery'; 
 const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2}) => {
   
-    
+  
   let new_OS = data[0][OS]
   let new_RESOURCE= data[1][RESOURCE]
 
-
   let the_counter = COUNTER.map((item,index) => {
-    return `硬碟${index+2}:${item.EC2_disk}GB `
+    return <div key={index}>硬碟{index+2}:{item.EC2_disk}GB</div>
   })
 
-  console.log(the_counter)
-
-  let the_counter2 = the_counter.join('\n')
-
-  console.log(the_counter2)
   let popover = (
     <Popover>
       <Popover.Body>
@@ -43,8 +37,6 @@ const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,S
 
     return <>
           <tr>
-     
-
               <td>{DEMAND}</td>
               <td>{encryptStorage1.getItem('query5').cn}</td>
               <td>{encryptStorage1.getItem('query5').dn.split(",")[1].split('_')[1]}</td>
@@ -52,28 +44,17 @@ const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,S
               <td>{new_OS}</td>
               <td>{new_RESOURCE}</td>
               <td>
-             
               <OverlayTrigger trigger="focus" placement="right" overlay={popover}>
                   <button className="storage">
                   {<GrStorage />}   
                   </button>
-                  
-               
               </OverlayTrigger>
-
-            
-             
               </td>
-
               <td>{SUBNET}</td>
               {IP === true ? 
-
               <td><AiFillCheckSquare className='ip_svg'/></td>
               :<td><MdOutlineDangerous className='ip_svg'/></td>
             }
-      
-            
-     
              <td className="nav-item dropdown">
                     <a className="" href="#/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <FiMoreVertical />
@@ -82,8 +63,7 @@ const EC2TableSingle = ({ID,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,S
                       <a className="dropdown-item" href="#/" onClick={() => editEC2(ID)}>修改</a> 
                       <a className="dropdown-item" href="#/" onClick={() => deleteEC2(ID)}>刪除</a>
                     </div>
-              </td>
-              
+              </td> 
         </tr>
 
 

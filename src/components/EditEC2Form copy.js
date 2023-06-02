@@ -3,13 +3,17 @@ import { EC2Context } from './CreateEC2'
 import {encryptStorage1} from '../App'
 
 
-const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_default,disk_default,dynamic_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,ip,subnet
-  ,counter,counter2,handle_Add_Disk,handle_Add_Disk2,handle_Remove_Disk,handle_Remove_Disk2,handle_Remove_Disk3,handleChange,handleChange2}) => {
+const EditEC2Form = ({theId,demand_default,server_name_default,os_default,disk_default,dynamic_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,ip,subnet
+,counter,handle_Add_Disk,handle_Remove_Disk,handleChange,handleChange2}) => {
     const receiveData = useContext(EC2Context)
     console.log(receiveData)
- 
-    console.log(counter2)
-
+    console.log(theId)
+    let a = receiveData.allEC2.findIndex(object => {
+      return object.ID = theId
+    })
+    console.log(a)
+  
+    console.log(counter)
  return <>
    
 
@@ -20,10 +24,9 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
-              <form className="form wrapper"  method="POST" id="the_form" onSubmit={handle_Update}>
-                      
-                      
-              <div className="form-row">
+              <form className="form wrapper" method="POST" id="the_form" onSubmit={handle_Update}>
+
+                      <div className="form-row">
                         <div className="form-group">
                           <label htmlFor="user_displayName">申請人</label>
                           <input type="text" value={encryptStorage1.getItem('query5').cn} disabled={true} name="user_displayName" className="form-control" id="user_displayName"/>
@@ -68,12 +71,71 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                           <select name="ami" id="instance_type" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
                             <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
                             <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
-                            
                             <option value="ami-00c39f71452c08778">Amazon Linux 2023 </option>
+                            <option value="ami-0e515107fd2bcc7fe">Windows Server 2019 </option>
                           </select>
                         </div>
                       
                       </div>
+
+
+                    
+                    <div className="form-row the_form-row">
+                        <div className="form-group the_form-group disk-1">
+                          <button onClick={handle_Add_Disk} className="add_disk">新增硬碟</button>
+                          <label>主機硬碟1</label>
+                          <div className='d-flex'>
+                            <input type="number" name='EC2_disk' placeholder="請輸入硬碟容量" onChange={disk_ChangeHandler} ref={disk_default} className="form-control" id="EC2_disk" min="8"/> 
+                            <div className='gb'>GB</div> 
+                          </div>
+                        </div>           
+                     </div>  
+
+                      {
+                    receiveData.allEC2[0].COUNTER.map((c, index) => {
+
+                  
+                            return <div className='form-row the_form-row'  key={Date.now()}>
+                              <div className="form-group the_form-group dynamic_disk" >  
+                              <button onClick={(e) => handle_Remove_Disk(e,index)} className="remove_disk" >移除硬碟{index+2}</button>
+                                      <label>主機硬碟{index + 2}</label>
+                                      <div className='d-flex'>
+                                          <input type="number" name="EC2_disk"  onChange={(e) => handleChange2(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                          <div className='gb'>GB</div>      
+                                      </div>               
+                              </div> 
+                            </div>
+                        }  
+                      )}  
+
+
+
+                      {
+                      counter.map((c, index) => {
+                            return <div className='form-row the_form-row' key={Date.now()}>
+
+                          
+                              <div className="form-group the_form-group dynamic_disk" >  
+                              <button onClick={(e) => handle_Remove_Disk(e,index)} className="remove_disk" >移除硬碟{index+2}</button>
+                                      <label>主機硬碟{index + 2}</label>
+                                      <div className='d-flex'>
+                                          <input type="number" name="EC2_disk"  value={c.EC2_disk || ''}  onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                          <div className='gb'>GB</div> 
+                                      </div>               
+                              </div> 
+                            </div>
+                          }
+                      )}    
+
+ 
+
+ 
+          
+
+
+
+              
+
                       <div className="form-row">
                         <div className="form-group">
                           <label htmlFor="instance_type">雲端主機規格</label>
@@ -86,67 +148,10 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                     
                       </div>
 
-                      <div className="form-row the_form-row">
-                        <div className="form-group the_form-group disk-1">
-                          <button onClick={handle_Add_Disk2} className="add_disk">新增硬碟</button>
-                          <label>主機硬碟1</label>
-                          <div className='d-flex'>
-                            <input type="number" name='EC2_disk' placeholder="請輸入硬碟容量" onChange={disk_ChangeHandler} ref={disk_default} className="form-control" id="EC2_disk" min="8"/> 
-                            <div className='gb'>GB</div> 
-                          </div>
-                        </div>           
-                     </div>  
-
-
-                    
-                     {
-                    receiveData.allEC2[theIndex].COUNTER.map((c, index) => {
-
-                  
-                            return <div className='form-row the_form-row'  key={index}>
-                                        <div className="form-group the_form-group dynamic_disk" >  
-                                                <button onClick={(e) => handle_Remove_Disk2(e,index)} className="remove_disk" >移除硬碟</button>
-                                                <label>主機硬碟</label>
-                                                <div className='d-flex'>
-                                                    <input type="number" name="EC2_disk" ref={(element) => dynamic_default.current[index] = element} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
-                                                    <div className='gb'>GB</div>      
-                                                </div>               
-                                        </div> 
-                            </div>
-                        }  
-                      )}   
-
-               
-                       {
-                        
-                          counter2.map((c, index) => {
-                            let start_point = receiveData.allEC2[theIndex].COUNTER.length + 2
-                            console.log(start_point)
-
-                            return <div className='form-row the_form-row' key={index}>
-
-                          
-                              <div className="form-group the_form-group dynamic_disk" >  
-                              <button onClick={(e) => handle_Remove_Disk3(e,index)} className="remove_disk">移除硬碟</button>
-                                      <label>主機硬碟</label>
-                                      <div className='d-flex'>
-                                          <input type="number" name="EC2_disk" value={c.EC2_disk || ''} onChange={(e) => handleChange2(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
-                                          <div className='gb'>GB</div> 
-                                      </div>               
-                              </div> 
-                            </div>
-                          }
-                      )}    
-
-
-
-
-
-
-
+                      
 
                       <div className="form-row">
-                        <div className="form-group">
+                        <div className="form-group col-md-4">
                           <label htmlFor="subnet">網段</label>
                           <select name="subnet" id="subnet" className="form-control" onChange={subnet_ChangeHandler} ref={subnet_default}>
                             <option value="A">A</option>
@@ -164,13 +169,16 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                 
                       {(subnet === 'DMZ1' ||  subnet === 'DMZ2') &&
                       <div className="form-row">
-                        <div className="form-group">
+                        <div className="form-group col-md-4">
                           <div className="form-check">
                               
                                 <label className="form-check-label" htmlFor="exampleCheck1">對外IP</label>
                                 <input type="checkbox" className="form-check-input" id="exampleCheck1" onChange={ip_ChangeHandler} ref={check_default} />
                           </div>
+
                         </div>
+                       
+                    
 
                       </div>
                     }

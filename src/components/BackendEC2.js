@@ -6,6 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import secureLocalStorage  from  "react-secure-storage";
 import Logout from './Logout';
 import {encryptStorage1} from '../App'
+import $ from 'jquery'; 
 export const BackendEC2Context = React.createContext()
 
 
@@ -87,7 +88,7 @@ const fetchData = async() => {
     if(data.data.length < 1 && demand_apply !== ''){
       setTem_demand(data.config.data)  
       setAlert(true)
-      window.$('#backend_ModalCenter').modal('show')
+      $('#backend_ModalCenter').modal('show')
     } else {
       setAlert(false)
     }

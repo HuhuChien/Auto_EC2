@@ -63,13 +63,14 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
             {  alert &&
                  <div className="modal fade" id="backend_ModalCenter" tabIndex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                  <div className="modal-dialog modal-dialog-centered" role="document">
-                   <div className="modal-content">
-                     <div className="modal-header">
+                   <div className="modal-content the-modal-content">
+                     <div className="modal-header ">
                        <h5 className="modal-title" id="backend_title">提示</h5>
-                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                       </button>
+                     
                      </div>
+                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                    </button>
                      <div className="modal-body">
                        無需求單號{demand_obj.demand}
                      </div>
