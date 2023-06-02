@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 
-
+//POST
 //登入
 exports.auth_login = (req,res,next) => {
     try{
@@ -46,7 +46,7 @@ exports.auth_login = (req,res,next) => {
    
 }
 
-
+//GET
 //登入時，client接收AD資訊
 exports.get_user_ADinfo = (req,res,next) => {
     try{
@@ -73,9 +73,8 @@ exports.get_user_ADinfo = (req,res,next) => {
    
 }
 
-
+//GET
 //登出，清除cookie
-
 exports.user_logout = (req,res,next) => {
     try{
         
@@ -87,6 +86,9 @@ exports.user_logout = (req,res,next) => {
   
 }
 
+
+
+//POST
 //新建雲端主機-送出按鈕
 exports.create_ec2_DB = async(req,res,next) => {
     try {
@@ -104,7 +106,7 @@ exports.create_ec2_DB = async(req,res,next) => {
     }
 }
 
-
+//POST
 //1.檢視申請內容
 //2.後台管理-需求單號輸入
 exports.demand_apply = async(req,res,next) => {
@@ -118,8 +120,8 @@ exports.demand_apply = async(req,res,next) => {
     }
 }
 
-
-//上述另一種寫法
+//GET
+//上述另一種寫法，目前沒使用
 //1.檢視申請內容
 //2.後台管理-需求單號輸入
 exports.demand_apply2 = async(req,res,next) => {
@@ -134,8 +136,7 @@ exports.demand_apply2 = async(req,res,next) => {
 }
 
 
-
-
+//PUT
 //後台管理，更新單一主機申請內容
 exports.update_ec2_backend = async(req,res,next) => {
 
@@ -154,7 +155,7 @@ exports.update_ec2_backend = async(req,res,next) => {
 
 
 
-
+//DELETE
 //後台管理，更新單一主機申請內容
 exports.delete_ec2_backend = async(req,res,next) => {
 

@@ -7,21 +7,25 @@ const moment = require('moment-timezone');
 var Terraform_data_Schemma = new mongoose.Schema({
     
     
-    AD_sAMAccountName: {
+    ad_displayname: {
+        type:String,
+        required:[true,'must provide AD_displayName'],
+        default: "NULL"
+     
+    },
+    
+    ad_samaccountname: {
         type:String,
         required:[true,'must provide AD_sAMAccountName'],
-        default:"路人甲"
+        default: "NULL"
      
     },
-    
-    AD_displayName: {
+    ad_depeartment:{
         type:String,
-        //required:[true,'must provide demand'],
-        default:"路人甲displayName"
-     
+        required:[true,'must provide AD_department'],
+        default: "NULL"
     },
-    
-    
+
     demand: {
         type:String,
         required:[true,'must provide demand'],
@@ -44,6 +48,13 @@ var Terraform_data_Schemma = new mongoose.Schema({
         type:String,
         required:[true,'must provide instance_type'],
      
+    },
+    disk1:{
+        type:String,
+        required:[true,'must provide disk1'],
+    },
+    extra_disks:{
+        type:Object
     },
     subnet: {
         type:String,
