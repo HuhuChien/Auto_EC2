@@ -221,7 +221,7 @@ const editEC2 = async(_id) => {
 )
 
   
-  await window.$('#form_modal_edit_backend').modal('show')
+  await $('#form_modal_edit_backend').modal('show')
   
   demand_default.current.value = edit_EC2.demand
   server_name_default.current.value = edit_EC2.server_name

@@ -326,9 +326,15 @@ const handle_Remove_Disk3 = async(e,index) => {
       console.log(item)
       if(item.value === ''){
         return  document.getElementById(`dynamic${index}`).classList.add('alarm')
+
+        
       } 
-      return null
+     return null
     })
+
+
+
+
 
 
     if(server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
@@ -377,11 +383,8 @@ const handle_Remove_Disk3 = async(e,index) => {
     } else {
       dispatch({type:"ADD_EC2",payload:newEC2})
       $('#form_modal').modal('hide')
-    }
-
-
-
- 
+    
+    } 
  
     
 

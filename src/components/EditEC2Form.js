@@ -1,25 +1,29 @@
 import React,{useContext} from 'react'
 import { EC2Context } from './CreateEC2'
 import {encryptStorage1} from '../App'
-
+// import EditCounter from './EditCounter_'
 
 const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_default,disk_default,dynamic_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,ip,subnet
-  ,counter,counter2,handle_Add_Disk,handle_Add_Disk2,handle_Remove_Disk,handle_Remove_Disk2,handle_Remove_Disk3,handleChange,handleChange2}) => {
+  ,counter,counter2,handle_Add_Disk,handle_Add_Disk2,handle_Remove_Disk,handle_Remove_Disk2,handle_Remove_Disk3,handleChange,handleChange2,ghost}) => {
     const receiveData = useContext(EC2Context)
     console.log(receiveData)
- 
+    console.log(counter)
     console.log(counter2)
 
+    let elements = document.querySelectorAll('.the-form-row:not(.ghost)')
+    console.log(elements)
+    let new_elements = Object.values(elements)
+    console.log(new_elements)
  return <>
-   
-
-        <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-        
+      <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+ 
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
+      
+          
               <form className="form wrapper"  method="POST" id="the_form" onSubmit={handle_Update}>
                       
                       
@@ -86,7 +90,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                     
                       </div>
 
-                      <div className="form-row the_form-row">
+                      <div className="form-row">
                         <div className="form-group the_form-group disk-1">
                           <button onClick={handle_Add_Disk2} className="add_disk">新增硬碟</button>
                           <label>主機硬碟1</label>
@@ -98,23 +102,23 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                      </div>  
 
 
-                    
-                     {
-                    receiveData.allEC2[theIndex].COUNTER.map((c, index) => {
+                
+                     {  
+                      
+                      receiveData.allEC2[theIndex].COUNTER.map((c, index) => {
+                        return <div className='form-row the-form-row' id={`dynamicc${index}`} key={index}>
+                            <div className="form-group the_form-group dynamic_disk" >  
+                                    <button onClick={(e) => handle_Remove_Disk2(e,index)} className="remove_disk" id={`dynamicc${index}`}>移除硬碟</button>
+                                    <label>主機硬碟</label>
+                                    <div className='d-flex'>
+                                        <input type="number" name="EC2_disk" ref={(element) => dynamic_default.current[index] = element} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                        <div className='gb'>GB</div>      
+                                    </div>               
+                            </div> 
+                       </div>
+                      })}
 
-                  
-                            return <div className='form-row the_form-row'  key={index}>
-                                        <div className="form-group the_form-group dynamic_disk" >  
-                                                <button onClick={(e) => handle_Remove_Disk2(e,index)} className="remove_disk" >移除硬碟</button>
-                                                <label>主機硬碟</label>
-                                                <div className='d-flex'>
-                                                    <input type="number" name="EC2_disk" ref={(element) => dynamic_default.current[index] = element} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
-                                                    <div className='gb'>GB</div>      
-                                                </div>               
-                                        </div> 
-                            </div>
-                        }  
-                      )}   
+
 
                
                        {
@@ -123,7 +127,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                             let start_point = receiveData.allEC2[theIndex].COUNTER.length + 2
                             console.log(start_point)
 
-                            return <div className='form-row the_form-row' key={index}>
+                            return <div className='form-row the-form-row' key={index}>
 
                           
                               <div className="form-group the_form-group dynamic_disk" >  
@@ -137,14 +141,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                             </div>
                           }
                       )}    
-
-
-
-
-
-
-
-
+                    
                       <div className="form-row">
                         <div className="form-group">
                           <label htmlFor="subnet">網段</label>
@@ -184,11 +181,10 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                       </div>
                       
               </form>
+       
           </div>
         </div>
       </div>
-  
-  
   </>
 }
 

@@ -1,10 +1,9 @@
 import React,{useEffect} from 'react'
-//import { EC2Context } from './CreateEC2'
 import {encryptStorage1} from '../App'
 //import $ from 'jquery'; 
 
 
-const EC2Form = ({demand,demand_default,server_name_default,os_default,disk_default,resource_default,subnet_default,check_default,
+const EC2Form = ({demand,demand_default,server_name_default,os_default,disk_default,dynamic_disks_default,resource_default,subnet_default,check_default,
   demand_ChangeHandler,ec2_Name_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Submit,
   cancel,ip_ChangeHandler,subnet_ChangeHandler,subnet,counter,handle_Add_Disk,handle_Remove_Disk,handleChange}) => {
 
@@ -111,7 +110,7 @@ useEffect(() => {
                             <button onClick={(e) => handle_Remove_Disk(e,index)} className="remove_disk" >移除硬碟{index+2}</button>
                                     <label>主機硬碟{index + 2}</label>
                                     <div className='d-flex'>
-                                        <input type="number" name="EC2_disk"  value={c.EC2_disk || ''} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                        <input type="number" name="EC2_disk" ref={dynamic_disks_default} value={c.EC2_disk || ''} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
                                         <div className='gb'>GB</div> 
                                     </div>
                 

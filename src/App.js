@@ -99,29 +99,11 @@ const App = () => {
                         </>}>  
                       <Route path="/create_ec2" element={ <CreateEC2 setQuery={setQuery} query4={query4} query5={query5}/>}></Route>
                       <Route path="/show_ec2" element={ <ApplyEC2 query={query} />}></Route>
-                      <Route path="/edit_ec2" element={ <EditEC2/>}></Route>
-                
-                     
-                    <Route path="/backend" element={ <BackendEC2/>}></Route>  
-                  
-                    </Route>
-                    
-                   </Route> 
-                
+                      <Route path="/edit_ec2" element={ <EditEC2/>}></Route>            
+                      <Route path="/backend" element={ <BackendEC2/>}></Route>           
+                    </Route>  
+                   </Route>     
               </Routes>
-        
-             
-           
-         
-            
- 
-          
-
-        
-           
-
-     
-    
     </>
 }
 

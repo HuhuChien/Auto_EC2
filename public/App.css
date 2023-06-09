@@ -144,6 +144,11 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
     text-align: center;
 }
 
+.ghost{
+    display: none;
+}
+
+
 
 /* User的Form check */
 
@@ -389,3 +394,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+/* #my-div{
+    pointer-events:none;
+} */
