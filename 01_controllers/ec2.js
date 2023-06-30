@@ -1,4 +1,4 @@
-const Terraform_data = require('../Models/EC2_defination');
+const Terraform_data = require('../Models/EC2_definition');
 const {the_ad} = require('../04_config/ad')
 const jwt = require('jsonwebtoken');
 
@@ -25,17 +25,14 @@ exports.auth_login = (req,res,next) => {
               const token = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
              
               res.cookie('token',token,{ 
-                maxAge: 24 *60 * 60 * 1000,//token會在24小時候到期
+                maxAge: 24 *60 * 60 * 1000, //token會在24小時候到期
                 httpOnly: true, //標記此cookie只能從web server　訪問，以避免不正確的進入來取得竄改。
                 //跟https有關係應該是另一個property->secure
 
             }).status(200).json({message: 'Logged in successfully',user:user});
-    
-      
-             
-            }
-            else {
-              console.log('ERROR: '+JSON.stringify(err));
+     
+            } else {
+              console.log('ERROR: ' + JSON.stringify(err));
               console.log('Authentication failed!');
               res.status(401).json('Authenticated failed')
             }
@@ -45,6 +42,7 @@ exports.auth_login = (req,res,next) => {
     }
    
 }
+
 
 //GET
 //登入時，client接收AD資訊
@@ -61,7 +59,7 @@ exports.get_user_ADinfo = (req,res,next) => {
     
             } else {
                 res.status(200).json(user)
-    
+
             }
           
           });
@@ -92,15 +90,17 @@ exports.user_logout = (req,res,next) => {
 //新建雲端主機-送出按鈕
 exports.create_ec2_DB = async(req,res,next) => {
     try {
-        //console.log(req.headers['x-forwarded-for'] || req.socket.remoteAddress )
-        //console.log(req.ip)
-        //let ip = req.connection.remoteAddress.split(`:`).pop();
-        //console.log(ip)
-        const Terraform = await Terraform_data.create(req.body)
-        //console.log(Terraform)
-        await Terraform.save()
-        await res.status(201).json({Terraform});
-
+        const result = await Terraform_data.findOne({
+            server_name:req.body.server_name
+        })
+        if(result === null){
+            const Terraform = await Terraform_data.create(req.body)
+            await Terraform.save()
+            await res.status(201).json({Terraform})
+            
+        } else {
+            res.status(400).json({error:result.server_name + '主機名稱已使用'})
+        }
     }catch(error){
         res.status(400).json({error:error})
     }
@@ -120,16 +120,17 @@ exports.demand_apply = async(req,res,next) => {
     }
 }
 
+
 //GET
 //上述另一種寫法，目前沒使用
 //1.檢視申請內容
 //2.後台管理-需求單號輸入
 exports.demand_apply2 = async(req,res,next) => {
-    try{
+    try {
         const {demand_apply} = req.params
         const the_data = await Terraform_data.find({ demand: demand_apply});
         res.status(200).send(the_data)
-    }catch(error){
+    } catch(error){
         res.status(400).json({error:error})
     }
 
@@ -156,7 +157,7 @@ exports.update_ec2_backend = async(req,res,next) => {
 
 
 //DELETE
-//後台管理，更新單一主機申請內容
+//後台管理，刪除單一主機申請內容
 exports.delete_ec2_backend = async(req,res,next) => {
 
     try{
@@ -165,9 +166,24 @@ exports.delete_ec2_backend = async(req,res,next) => {
         console.log(deletedEC2)
         res.status(200).json("already deleted")
     }catch(error){
+        res.status(400).json({error:error})
+    }
+   
+
+}
+
+//新建雲端主機-如果發生主機名稱重複，會刪除資料庫連帶成功送出的主機(未完成)
+
+exports.check_name_in_DB = async(req,res,next) => {
+
+    try{
+     const result = await Terraform_data.find({ server_name:id });
+     console.log(result)
+    }catch(error){
    
         res.status(400).json({error:error})
     }
    
 
 }
+

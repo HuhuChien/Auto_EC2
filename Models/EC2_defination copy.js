@@ -37,11 +37,11 @@ var Terraform_data_Schemma = new mongoose.Schema({
         required:[true,'must provide server_name'],
      
     },
-      
+
+
     ami: {
         type:String,
         required:[true,'must provide ami'],
-     
     },
 
     instance_type: {
@@ -63,8 +63,8 @@ var Terraform_data_Schemma = new mongoose.Schema({
     },
     ip: {
         type:Boolean,
-        required:[true,'must provide ip'],
-     
+        required:[false,'not necessary'],
+        default: false
     },
     created_date: {
         type: String,
