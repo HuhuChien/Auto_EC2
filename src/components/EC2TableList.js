@@ -115,7 +115,6 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious,c
             <th scope="col">主機規格</th>
             <th scope="col">主機硬碟</th>
             <th scope="col">網段</th>
-            <th scope="col">對外IP</th>
             <th scope="col">進階</th>
           </tr>
         </thead>
@@ -124,14 +123,8 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious,c
               {records.map((ec2,index) => {
                     console.log(ec2)
                     return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2} editEC2={editEC2} counter={counter} cancelstorage={cancelstorage} theIndex={theIndex}/>
-                  
-                  
-              })
-
-
-              }
-
-
+                         
+              })}
         </tbody>
       </table>
   

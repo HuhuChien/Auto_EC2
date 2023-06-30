@@ -27,7 +27,6 @@ const EmptyTableList2 = ({demand_apply,alert,tem_demand}) => {
               <th scope="col">主機規格</th>
               <th scope="col">主機硬碟</th>
               <th scope="col">網段</th>
-              <th scope="col">對外IP</th>
               <th scope="col">進階</th>
             </tr>
           </thead>

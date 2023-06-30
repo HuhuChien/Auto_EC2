@@ -18,3 +18,14 @@
 //     $('[data-toggle="popover"]').popover();
 //   }),1000);
 
+
+
+console.log('apple')
+
+  $('#EC2_disk').on("keypress",function (evt) {
+    console.log(evt)
+    if (this.value.length == 1 && evt.which == 48 )
+    {
+       evt.preventDefault();
+    }
+ });

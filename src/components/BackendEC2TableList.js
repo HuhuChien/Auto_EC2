@@ -1,12 +1,9 @@
-
-import React,{ useEffect,useContext,useState } from 'react'
-import EC2TableSingle from './EC2TableSingle'
+import React,{ useContext } from 'react'
 import { BackendEC2Context } from './BackendEC2'
-import {VscChevronLeft,VscChevronRight} from "react-icons/vsc";
-import {AiOutlineFileSearch} from 'react-icons/ai'
+
 import BackendEC2TableSingle from './BackendEC2TableSingle';
 
-const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) => {
+const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2,response}) => {
 
 
   const receiveData = useContext(BackendEC2Context)
@@ -38,9 +35,10 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
                       <th scope="col">需求單單號</th>
                       <th scope="col">申請人</th>
                       <th scope="col">申請人部門</th>
-                      <th scope="col">雲端主機名稱</th>
-                      <th scope="col">雲端主機作業系統</th>
-                      <th scope="col">雲端主機規格</th>
+                      <th scope="col">主機名稱</th>
+                      <th scope="col">主機作業系統</th>
+                      <th scope="col">主機規格</th>
+                      <th scope="col">主機硬碟</th>
                       <th scope="col">網段</th>
                       <th scope="col">對外IP</th>
                       <th scope="col">進階</th>
@@ -49,7 +47,7 @@ const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2}) 
                   <tbody>
 
                         {receiveData.map((ec2,index) => {
-                              
+                              console.log(ec2)
                               return <BackendEC2TableSingle key={ec2._id} {...ec2} deleteEC2={deleteEC2} editEC2={editEC2}/>
                                               
                         })

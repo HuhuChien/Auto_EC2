@@ -23,10 +23,10 @@ const CreateEC2 = ({setQuery}) => {
   const [theId,setTheid] = useState('')
   const [demand,setDemand] = useState('')
   const [ec2Name,setEc2Name] = useState('')
-  const [os,setOS] = useState('ami-006e00d6ac75d2ebb')
+  const [os,setOS] = useState('ami-0e515107fd2bcc7fe')
   const [disk,setDisk] = useState(30)
-  const [resource,setResource] = useState('t1.micro')
-  const [subnet,setSubnet] = useState('A')
+  const [resource,setResource] = useState('t3.nano')
+  const [subnet,setSubnet] = useState('subnet-f20f8085')
   const [ip,setIp] = useState(false)
   const [edit,setEdit] = useState(false)
   const [loading,setLoading] = useState(false)
@@ -59,14 +59,13 @@ const CreateEC2 = ({setQuery}) => {
     allEC2: [],
 
     }
-
+  console.log(dynamic_disks_default)
 
   const [state,dispatch] = useReducer(reducer,defaultState)
  
   //前端主機清單及頁面右上角的AD資訊
   useEffect(() => {
-    //windlow.localStorage.removeItem('all')
-    //window.localStorage.clear();//重新整理和關閉session  效果會衝突
+   
    
 
     const data = JSON.parse(sessionStorage.getItem('all'))
@@ -93,16 +92,6 @@ const CreateEC2 = ({setQuery}) => {
     setEc2Name(server_name_default.current.value)
 
   }, [state,state.allEC2]);
-/*
-  useEffect(() => {
-
-    sessionStorage.setItem('all', JSON.stringify(state));
-   
-    setDemand(demand_default.current.value)
-    setEc2Name(server_name_default.current.value)
-  }, [state,state.allEC2,demand,ec2Name,os,resource,disk,subnet,ip]);
-*/
-
 
 
 
@@ -132,36 +121,28 @@ const CreateEC2 = ({setQuery}) => {
   }
 
   const disk_ChangeHandler = (e) => {
-  
-    setDisk(e.target.value)
+      console.log(e.target.value)
+      if(e.target.value.startsWith('0')){
+        setDisk(e.target.value.replace(/^0*/,""))
+ 
+      } else {
+        setDisk(e.target.value)
+      }
     
-   
-    console.log(e.target.value)
 }
   
   const instance_type_ChangeHandler = (e) => {
       setResource(e.target.value)
-      console.log(e.target.value)
+      
   }
-
-
-  
- 
 
   const subnet_ChangeHandler = (e) => {
    
     setSubnet(e.target.value)
     
-    if(subnet !== 'DMZ1' || subnet !== 'DMZ2'){
-      setIp(false)
-    }
 
-    //dispatch({type:"SUBNET_UPDATE",payload:e.target.value}) //選DMZ時，會出現IP選項是否打勾
    
 }
-
-
-
 
   const ip_ChangeHandler = (e) => {
   setIp(!ip)
@@ -173,6 +154,7 @@ const handleChange = (e,i) => {
   try{
     let elements = document.querySelectorAll('.the-form-row:not(.ghost)')
     let new_elements = Object.values(elements)
+
     console.log(new_elements)
     let important_index = new_elements.findIndex(function(item,index){
       console.log(item)
@@ -182,16 +164,26 @@ const handleChange = (e,i) => {
 
     const {name,value} = e.target
     const onChangeVal = [...counter]
-    console.log(onChangeVal)
+    
+
     if(ghost){
       onChangeVal[important_index][name]= value
     }else {
       onChangeVal[i][name]= value
     }
     
+    console.log(onChangeVal)
     
+    
+    // onChangeVal.map((item,index) => {
+    //   console.log(item.EC2_disk)
+    //   let a =  item.EC2_disk.replace(/^0*/,"")
+    // })
+    
+
+
     setCounter(onChangeVal)
-  }catch(error){
+  } catch(error){
     console.log(error)
   }
 
@@ -270,7 +262,8 @@ const handle_Remove_Disk2 = async(e,index) => {
       deleteVal.splice(important_index,1)
       setCounter(deleteVal)
       e.target.parentElement.parentElement.classList.add('ghost')
-  
+      //e.target.parentElement.childNodes[2].childNodes[0].id = 'none'
+      //console.log(e.target.parentElement.childNodes[2].childNodes[0].id)
 };
 
 const handle_Remove_Disk3 = async(e,index) => {
@@ -283,134 +276,209 @@ const handle_Remove_Disk3 = async(e,index) => {
 };
 
 
+
+
+
 //儲存按鈕
   const handle_Submit = (e) => {
-    e.preventDefault();
-
-    const newEC2 = {
-      ID:uuidv4(),
-      DEMAND:demand,
-      EC2NAME:ec2Name,
-      DISK:disk,
-      COUNTER:counter,
-      OS: os,
-      RESOURCE: resource,
-      SUBNET:subnet,
-      IP:ip,
-      APPLY_DATE: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
-    } 
     
-    //找出額外新增的硬碟
-    let array_disk_dynamic = document.getElementsByClassName('EC2_disk_dynamic')
-    array_disk_dynamic = Object.values(array_disk_dynamic)
+    try{
+      e.preventDefault();
 
-    //先將紅色告警消除
-    demand_default.current.classList.remove('alarm')
-    server_name_default.current.classList.remove('alarm')
-    disk_default.current.classList.remove('alarm')
-    dynamic_disks_default.current.classList.remove('alarm')
-    array_disk_dynamic.map((item,index) => {
-      if(item.value !== ''){
-        return document.getElementById(`dynamic${index}`).classList.remove('alarm')
-        
-      }
-      return null
-    })
-
-
- 
-   
-    //額外硬碟沒有填寫的欄位，增加紅色告警(要全部空白額外硬碟才適用)
-    
-    array_disk_dynamic.map((item,index) => {
-      console.log(item)
-      if(item.value === ''){
-        return  document.getElementById(`dynamic${index}`).classList.add('alarm')
+      const newEC2 = {
+        ID:uuidv4(),
+        AD_DISPLAYNAME:encryptStorage1.getItem('query5').displayName,
+        AD_SAMACCOUNTNAME:encryptStorage1.getItem('query5').sAMAccountName,
+        AD_DEPARTMENT:encryptStorage1.getItem('query5').dn.split(',')[1].split('=')[1],
+        DEMAND:demand,
+        EC2NAME:ec2Name,
+        DISK:disk,
+        COUNTER:counter,
+        OS: os,
+        RESOURCE: resource,
+        SUBNET:subnet,
+        IP:ip,
+        APPLY_DATE: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
       } 
-      return null
-    })
-
-
-    if(server_name_default.current.value === '' && demand_default.current.value === '' && disk_default.current.value === ''){
-      server_name_default.current.classList.add('alarm')
-      demand_default.current.classList.add('alarm') 
-      disk_default.current.classList.add('alarm') 
-      return 
       
-    } else if(server_name_default.current.value === '' && demand_default.current.value === ''){
-      server_name_default.current.classList.add('alarm')
-      demand_default.current.classList.add('alarm')   
-      return 
+      //找出額外新增的硬碟
+      let array_disk_dynamic = document.getElementsByClassName('EC2_disk_dynamic')
+      console.log(array_disk_dynamic)
+      array_disk_dynamic = Object.values(array_disk_dynamic)
+      console.log(array_disk_dynamic)
+      //先將紅色告警消除
+      demand_default.current.classList.remove('alarm')
+      server_name_default.current.classList.remove('alarm')
+      disk_default.current.classList.remove('alarm')
+     
+     
+      
+      //檢查各欄位是否空白(主要有4個欄位可能會被User留空白)
+      if(demand.trim().length === 0 && ec2Name.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+        demand_default.current.classList.add('alarm') 
+        server_name_default.current.classList.add('alarm')  
+        disk_default.current.classList.add('alarm') 
+        
+        array_disk_dynamic.map((item,index) => {
+          if(item.value !== ''){
+            return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+          } else if(item.value === '') {
+            return document.getElementById(`dynamic${index}`).classList.add('alarm')
+          } 
+          return null
+        })
+        return 
 
-    } else if(server_name_default.current.value === '' && disk_default.current.value === ''){
-      server_name_default.current.classList.add('alarm')
-      disk_default.current.classList.add('alarm') 
-      return 
-    } else if(demand_default.current.value === '' && disk_default.current.value === ''){
-      demand_default.current.classList.add('alarm') 
-      disk_default.current.classList.add('alarm') 
-      return 
-    } else if(server_name_default.current.value === '' && dynamic_disks_default.current.value === ''){
-      server_name_default.current.classList.add('alarm')
-      dynamic_disks_default.current.classList.add('alarm') 
-      return
-    } else if(demand_default.current.value === '' && dynamic_disks_default.current.value === ''){
-      demand_default.current.classList.add('alarm')
-      dynamic_disks_default.current.classList.add('alarm') 
-      return
-    } else if(disk_default.current.value === '' && dynamic_disks_default.current.value === ''){
-      disk_default.current.classList.add('alarm')
-      dynamic_disks_default.current.classList.add('alarm') 
-      return
-    } else if(dynamic_disks_default.current.value === ''){
-      dynamic_disks_default.current.classList.add('alarm') 
-      return 
-    } else if(server_name_default.current.value  === ''){
-      server_name_default.current.classList.add('alarm') 
-      return 
-    } else if(demand_default.current.value === ''){
-      demand_default.current.classList.add('alarm') 
-      return 
-    } else if(disk_default.current.value === ''){
-      disk_default.current.classList.add('alarm') 
-      return 
-    } else {
-      dispatch({type:"ADD_EC2",payload:newEC2})
-      $('#form_modal').modal('hide')
+
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          server_name_default.current.classList.add('alarm')  
+
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return
+        } else if(demand.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          disk_default.current.classList.add('alarm')
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(ec2Name.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+          server_name_default.current.classList.add('alarm')   
+          disk_default.current.classList.add('alarm')
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(ec2Name.trim().length === 0  && array_disk_dynamic.length > 0){
+          server_name_default.current.classList.add('alarm')   
+  
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(demand.trim().length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(disk.length === 0 && array_disk_dynamic.length > 0){
+          disk_default.current.classList.add('alarm')
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0 && disk.length === 0){
+          demand_default.current.classList.add('alarm') 
+          server_name_default.current.classList.add('alarm')  
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0){
+            demand_default.current.classList.add('alarm') 
+            server_name_default.current.classList.add('alarm')  
+            return 
+        } else if(demand.trim().length === 0 && disk.length === 0){
+          demand_default.current.classList.add('alarm') 
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(ec2Name.trim().length === 0 && disk.length === 0){
+          server_name_default.current.classList.add('alarm')  
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(demand.trim().length === 0){
+          demand_default.current.classList.add('alarm') 
+          return 
+        } else if(ec2Name.trim().length === 0){
+          server_name_default.current.classList.add('alarm')  
+          return
+        } else if(disk.length === 0){
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(array_disk_dynamic.length > 0 && array_disk_dynamic.find(item => item.value === '')){
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else {
+            dispatch({type:"ADD_EC2",payload:newEC2})
+            $('#form_modal').modal('hide')
+          }
+   
+   
+      
+  
+  
+  
+  
+  
+  
+      //送出到前端table list後，form回復預設值
+     
+      server_name_default.current.value = ''
+      os_default.current.value = 'ami-0e515107fd2bcc7fe'
+      resource_default.current.value = 't3.nano'
+      subnet_default.current.value = 'subnet-f20f8085'
+      disk_default.current.value = 30
+  
+     
+      setOS('ami-0e515107fd2bcc7fe')
+      setResource('t3.nano')
+      setSubnet('subnet-f20f8085')
+      setIp(false)
+      setDisk(30)
+      setCounter([])
+
+      if(query2.npage >= 1){ 
+        setTriggerNext((triggerNext) => triggerNext + 1);
+  
+      }
+    }catch(error){
+      console.log(error)
     }
-
-
-
- 
- 
     
-
-
-
-
-
-
-    //送出到前端table list後，form回復預設值
+    
    
-    server_name_default.current.value = ''
-    os_default.current.value = 'ami-006e00d6ac75d2ebb'
-    resource_default.current.value = 't1.micro'
-    subnet_default.current.value = 'A'
-    disk_default.current.value = 30
-
-   
-    setOS('ami-006e00d6ac75d2ebb')
-    setResource('t1.micro')
-    setSubnet('A')
-    setIp(false)
-    setDisk(30)
-    setCounter([])
-    //setCancelStorage(false)
-    //setCounter2([])
-    if(query2.npage >= 1){ 
-      setTriggerNext((triggerNext) => triggerNext + 1);
-
-    }
   
   };
 
@@ -442,6 +510,9 @@ const editEC2 = async(ID) => {
  subnet_default.current.value = edit_EC2.SUBNET
  disk_default.current.value = edit_EC2.DISK
 
+
+
+ //UI Input欄位代入原本數值
  edit_EC2.COUNTER.map((item,index) => {
     return dynamic_default.current[index].value = edit_EC2.COUNTER[index].EC2_disk
  })
@@ -457,14 +528,7 @@ const editEC2 = async(ID) => {
  setDisk(edit_EC2.DISK)
  setSubnet(edit_EC2.SUBNET)
  setIp(edit_EC2.IP) 
-//  setCancelStorage(false)
 
- if(subnet_default.current.value === 'DMZ1' || subnet_default.current.value === 'DMZ2'){
-   console.log(edit_EC2.IP)
-
-  check_default.current.checked = edit_EC2.IP//不能使用ip，還是會是false。應該是執行順序的問題
-
- } 
 
 } 
 
@@ -493,36 +557,182 @@ const handle_Update = async(e) => {
 
   try{
       e.preventDefault()
-    //檢查欄位是否填完整
-    if(server_name_default.current.value === '' && demand_default.current.value === ''){
-      server_name_default.current.classList.add('alarm')
-      demand_default.current.classList.add('alarm') 
-      return
-    } else if(server_name_default.current.value === ''){
-      return  server_name_default.current.classList.add('alarm')
+      //檢查欄位是否填完整
       
+      //找出額外新增的硬碟
+      let array_disk_dynamic = document.getElementsByClassName('EC2_disk_dynamic')
+      array_disk_dynamic = Object.values(array_disk_dynamic)
+
   
-    } else if(demand_default.current.value  === ''){
-      return demand_default.current.classList.add('alarm') 
+      //先將紅色告警消除
+      demand_default.current.classList.remove('alarm')
+      server_name_default.current.classList.remove('alarm')
+      disk_default.current.classList.remove('alarm')
      
-    } 
-    const update = {ID:theId,DEMAND:demand,EC2NAME:ec2Name,OS:os,RESOURCE:resource,DISK:disk, COUNTER:[...counter,...counter2],SUBNET:subnet,IP:ip,
-      APPLY_DATE: `${new Date().getFullYear()} - ${new Date().getMonth() + 1}-${new Date().getDate()}`}
+     
+      
+      //檢查各欄位是否空白(主要有4個欄位可能會被User留空白)
+      
+      
+      if(demand.trim().length === 0 && ec2Name.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+        demand_default.current.classList.add('alarm') 
+        server_name_default.current.classList.add('alarm')  
+        disk_default.current.classList.add('alarm') 
+        
+        array_disk_dynamic.map((item,index) => {
+          if(item.value !== ''){
+            return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+          } else if(item.value === '') {
+            return document.getElementById(`dynamic${index}`).classList.add('alarm')
+          } 
+          return null
+        })
+        return 
+
+
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          server_name_default.current.classList.add('alarm')  
+
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return
+        } else if(demand.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          disk_default.current.classList.add('alarm')
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(ec2Name.trim().length === 0 && disk.length === 0 && array_disk_dynamic.length > 0){
+          server_name_default.current.classList.add('alarm')   
+          disk_default.current.classList.add('alarm')
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(ec2Name.trim().length === 0  && array_disk_dynamic.length > 0){
+          server_name_default.current.classList.add('alarm')   
   
-    await dispatch({type:"UPDATE_EC2",payload:update})
-    await $('#form_modal_edit').modal('hide')
-    await setEdit(false)
+      
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(demand.trim().length === 0 && array_disk_dynamic.length > 0){
+          demand_default.current.classList.add('alarm') 
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(disk.length === 0 && array_disk_dynamic.length > 0){
+          disk_default.current.classList.add('alarm')
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return 
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0 && disk.length === 0){
+          demand_default.current.classList.add('alarm') 
+          server_name_default.current.classList.add('alarm')  
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(demand.trim().length === 0 && ec2Name.trim().length === 0){
+            demand_default.current.classList.add('alarm') 
+            server_name_default.current.classList.add('alarm')  
+            return 
+        } else if(demand.trim().length === 0 && disk.length === 0){
+          demand_default.current.classList.add('alarm') 
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(ec2Name.trim().length === 0 && disk.length === 0){
+          server_name_default.current.classList.add('alarm')  
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(demand.trim().length === 0){
+          demand_default.current.classList.add('alarm') 
+          return 
+        } else if(ec2Name.trim().length === 0){
+          server_name_default.current.classList.add('alarm')  
+          return
+        } else if(disk.length === 0){
+          disk_default.current.classList.add('alarm') 
+          return 
+        } else if(array_disk_dynamic.length > 0 && array_disk_dynamic.find(item => item.value === '')){
+          array_disk_dynamic.map((item,index) => {
+            if(item.value !== ''){
+              return document.getElementById(`dynamic${index}`).classList.remove('alarm')
+            } else if(item.value === '') {
+              return document.getElementById(`dynamic${index}`).classList.add('alarm')
+            } 
+            return null
+          })
+          return   
+        } else {
+          const update = { 
+          AD_DISPLAYNAME:encryptStorage1.getItem('query5').displayName,
+          AD_SAMACCOUNTNAME:encryptStorage1.getItem('query5').sAMAccountName,
+          AD_DEPARTMENT:encryptStorage1.getItem('query5').dn.split(',')[1].split('=')[1],
+          ID:theId,
+          DEMAND:demand,
+          EC2NAME:ec2Name,
+          OS:os,
+          RESOURCE:resource,
+          DISK:disk, 
+          COUNTER:[...counter,...counter2],
+          SUBNET:subnet,
+          APPLY_DATE: `${new Date().getFullYear()} - ${new Date().getMonth() + 1}-${new Date().getDate()}`}
+        
+          await dispatch({type:"UPDATE_EC2",payload:update})
+          await $('#form_modal_edit').modal('hide')
+          await setEdit(false)
+        }
+     
+
+  
     if(query3.length > 0){
       window.location.reload(true)
     }
   
-   
+      
       //要將state回復預設值
       setEdit(false)
       setEc2Name('')
-      setOS('ami-006e00d6ac75d2ebb')
-      setResource('t1.micro')
-      setSubnet('A')
+      setOS('ami-0e515107fd2bcc7fe')
+      setResource('t3.nano')
+      setSubnet('subnet-f20f8085')
       setIp(false)
       setDisk(30)
       setCounter([])
@@ -532,10 +742,6 @@ const handle_Update = async(e) => {
   }catch(error){
     console.log(error)
   }
-
-  
-
-
 
 }
 
@@ -549,9 +755,9 @@ const cancel = (e) => {
   //要將表格欄位回復預設值
   demand_default.current.value = demand
   server_name_default.current.value = ''
-  os_default.current.value = 'ami-006e00d6ac75d2ebb'
-  resource_default.current.value = 't1.micro'
-  subnet_default.current.value = 'A'
+  os_default.current.value = 'ami-0e515107fd2bcc7fe'
+  resource_default.current.value = 't3.nano'
+  subnet_default.current.value = 'subnet-f20f8085'
   //disk_default.current.value = 30
 
 
@@ -559,12 +765,12 @@ const cancel = (e) => {
   setTheid('')
   setEdit(false)
   setEc2Name('')
-  setOS('ami-006e00d6ac75d2ebb')
-  setResource('t1.micro')
+  setOS('ami-0e515107fd2bcc7fe')
+  setResource('t3.nano')
   setDisk(30)
   setCounter([])
   setCounter2([])
-  setSubnet('A')
+  setSubnet('subnet-f20f8085')
   setIp(false)
   setGhost(false)
   setCancelStorage(true)
@@ -581,25 +787,38 @@ const handle_Submit_DB =async(e) => {
     try{
       axios.defaults.withCredentials = true //一定要有這行，解決reload後，無法送出問題
       await setDisabled(true)
-       for (const[i,value] of state.allEC2.entries()){
+      
+  
+      // for (const[index,item] of state.allEC2.entries()){
+      //   const url = 'http://localhost:5020/check_name'
+      //   const a = axios.get(url)
+      //   a.then((result) => {
+      //     console.log(result)
+      //   })
+      // } 
+
+     
+      for (const[i,value] of state.allEC2.entries()){
         let payload = state.allEC2
         console.log(payload)
         const url = 'http://localhost:5020/task'
-      await axios.post(url,{
-          ad_displayname:payload[i].AD_DISPLAYNAME,
-          ad_samaccountname:payload[i].AD_SAMACCOUNTNAME,
-          ad_depeartment:payload[i].AD_DEPARTMENT,
-          demand:payload[i].DEMAND,
-          server_name:payload[i].EC2NAME,
-          ami:payload[i].OS,
-          instance_type:payload[i].RESOURCE,
-          disk1:payload[i].DISK,
-          extra_disks:payload[i].COUNTER.map((item) => {
-            return item
-          }),
-          subnet:payload[i].SUBNET,
-          ip:payload[i].IP
-        })
+
+        await axios.post(url,{
+              ad_displayname:payload[i].AD_DISPLAYNAME,
+              ad_samaccountname:payload[i].AD_SAMACCOUNTNAME,
+              ad_depeartment:payload[i].AD_DEPARTMENT,
+              demand:payload[i].DEMAND,
+              server_name:payload[i].EC2NAME,
+              ami:payload[i].OS,
+              instance_type:payload[i].RESOURCE,
+              disk1:payload[i].DISK,
+              extra_disks:payload[i].COUNTER.map((item) => {
+                return item
+              }),
+              subnet:payload[i].SUBNET,
+              ip:payload[i].IP
+
+          })
 
       }
     
@@ -627,7 +846,7 @@ const handle_Submit_DB =async(e) => {
   await new Promise((resolve, reject) => {
     resolve(setLoading(false));
     console.log('done3')
-      })
+  })
     
 
   await new Promise((resolve, reject) => {
@@ -644,26 +863,28 @@ const handle_Submit_DB =async(e) => {
 
   
     
-    }catch(error){
-      console.log(error.name)
- 
-      window.alert('無法成功上傳資料，請稍後再試，或請通知系統管理課')
-  }
-  
-  }
+  }catch(error){
+      console.log(error)
+      //通知user，主機名稱重複
+      window.alert(error.response.data.error)
+      //在資料庫刪除連帶成功上傳的主機，最後讓user修改重複的主機名稱後，再重新整批主機清單上傳資料庫
 
-  
 
-  
- 
+      
+      
+
+      window.location.reload(false)
+  }}
+
+
   return <>
-    <EC2Context.Provider value={state} >
+    <EC2Context.Provider value={state}>
         
     <div className='bar_ad_settings'>
           <div className="username">{
            encryptStorage1.getItem('query5').sAMAccountName + ' ' + 
            encryptStorage1.getItem('query5').displayName
-            }
+          }
             </div> 
             <Logout />
         </div> 
@@ -677,8 +898,8 @@ const handle_Submit_DB =async(e) => {
           {/* 要再確認EditEC2Form的props那些要留 20230423*/}
           {edit ? <EditEC2Form theId={theId} theIndex={theIndex} demand_default={demand_default} server_name_default={server_name_default} 
           os_default={os_default} disk_default={disk_default} dynamic_default={dynamic_default} resource_default={resource_default} subnet_default={subnet_default} check_default={check_default} demand_ChangeHandler={demand_ChangeHandler}
-          ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} disk_ChangeHandler={disk_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  subnet_ChangeHandler={subnet_ChangeHandler}  
-            ip_ChangeHandler={ip_ChangeHandler}  cancel={cancel} handle_Update={handle_Update} subnet={subnet} counter={counter} counter2={counter2} handle_Add_Disk={handle_Add_Disk} handle_Add_Disk2={handle_Add_Disk2} handle_Remove_Disk={handle_Remove_Disk} handleChange={handleChange} 
+          ec2_Name_ChangeHandler={ec2_Name_ChangeHandler} os_ChangeHandler={os_ChangeHandler} disk_ChangeHandler={disk_ChangeHandler} instance_type_ChangeHandler={instance_type_ChangeHandler}  
+          subnet_ChangeHandler={subnet_ChangeHandler} ip_ChangeHandler={ip_ChangeHandler}  cancel={cancel} handle_Update={handle_Update} subnet={subnet} counter={counter} counter2={counter2} handle_Add_Disk={handle_Add_Disk} handle_Add_Disk2={handle_Add_Disk2} handle_Remove_Disk={handle_Remove_Disk} handleChange={handleChange} 
             handle_Remove_Disk2={handle_Remove_Disk2} handle_Remove_Disk3={handle_Remove_Disk3} handleChange2={handleChange2} ghost={ghost}/> 
             
             : <EC2Form demand={demand} demand_default={demand_default} server_name_default={server_name_default} os_default={os_default} disk_default={disk_default}
@@ -696,7 +917,7 @@ const handle_Submit_DB =async(e) => {
               <EC2TableList deleteEC2={deleteEC2} editEC2={editEC2} setQuery2={setQuery2} triggerNext={triggerNext} triggerPrevious={triggerPrevious} counter={counter} cancelstorage={cancelstorage} theIndex={theIndex}/>
               :
               <EmptyTableList />}
-           {loading && <div className="clip_loader"  ref={spinner_default}><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
+              {loading && <div className="clip_loader"  ref={spinner_default}><ClipLoader id="ClipLoader" color="#36d7b7" size="100px"/></div>}
      
      
       </EC2Context.Provider>

@@ -11,9 +11,7 @@ import {encryptStorage1} from '../App'
 const ApplyEC2TableSingle = ({demand,server_name,ami,disk1,extra_disks,instance_type,APPLY_DATE,subnet,ip}) => {
     let new_OS = data[0][ami]
     let new_RESOURCE= data[1][instance_type]
-    // let the_counter = extra_disks.map((item,index) => {
-    //   return `硬碟${index+2}:${item.EC2_disk}GB`
-    // })
+    let new_SUBNET= data[2][subnet]
 
     let the_counter = extra_disks.map((item,index) => {
       return <div>硬碟{index+2}:{item.EC2_disk}GB</div>
@@ -45,20 +43,14 @@ const ApplyEC2TableSingle = ({demand,server_name,ami,disk1,extra_disks,instance_
              <OverlayTrigger trigger="focus" placement="right" overlay={popover}>
                  <button className="storage">
                  {<GrStorage />}   
-                 </button>
-                 
-              
+                 </button>  
              </OverlayTrigger>
 
            
             
              </td>
-              <td>{subnet}</td>
-              {ip === true ? 
-
-              <td><AiFillCheckSquare /></td>
-              :<td><MdOutlineDangerous /></td>
-            }
+              <td>{new_SUBNET}</td>
+           
       
 
   

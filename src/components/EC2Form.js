@@ -82,10 +82,10 @@ useEffect(() => {
                         <div className="form-group  the_form-group">
                           <label>主機作業系統</label>
                           <select name="ami" id="ami" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
-                            <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
-                            <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
-                            <option value="ami-00c39f71452c08778">Amazon Linux 2023 </option>
-                            <option value="ami-0e515107fd2bcc7fe">Windows Server 2019 </option>
+                            <option value="ami-0e515107fd2bcc7fe">Windows Server 2019</option>
+                            <option value="ami-0d52744d6551d851e">Ubuntu 22.04 LTS</option>
+                            <option value="ami-06a46da680048c8ae">CentOS 7</option>
+                          
                           </select>
                         </div>
                       </div>
@@ -110,7 +110,7 @@ useEffect(() => {
                             <button onClick={(e) => handle_Remove_Disk(e,index)} className="remove_disk" >移除硬碟{index+2}</button>
                                     <label>主機硬碟{index + 2}</label>
                                     <div className='d-flex'>
-                                        <input type="number" name="EC2_disk" ref={dynamic_disks_default} value={c.EC2_disk || ''} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                        <input type="number" name="EC2_disk" ref={dynamic_disks_default} value={c.EC2_disk || ''} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`} min="8"></input>
                                         <div className='gb'>GB</div> 
                                     </div>
                 
@@ -125,9 +125,21 @@ useEffect(() => {
                         <div className="form-group the_form-group">
                           <label>主機規格</label>
                           <select name="instance_type" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
-                              <option value="t1.micro">1vCPU 0.612GB Mem</option>
-                              <option value="t2.nano">1vCPU 0.5GB Mem</option>
-                              <option value="t2.micro">1vCPU 1GB Mem</option>
+                              <option value="t3.nano">t3.nano(2vCPUs 0.5GiB Mem)</option>
+                              <option value="t3.micro">t3.micro(2vCPUs 1.0GiB Mem)</option>
+                              <option value="t3.small">t3.small(2vCPUs 2.0GiB Mem)</option>
+                              <option value="t3.medium">t3.medium(2vCPUs 4.0GiB Mem)</option>
+                              <option value="t3.large">t3.large(2vCPUs 8.0GiB Mem)</option>
+                              <option value="t3.xlarge">t3.xlarge(4vCPUs 16.0GiB Mem)</option>
+
+                              <option value="t4g.nano">t4g.nano(2vCPUs 0.5GiB Mem)</option>
+                              <option value="t4g.micro">t4g.micro(2vCPUs 1.0GiB Mem)</option>
+                              <option value="t4g.small">t4g.small(2vCPUs 2.0GiB Mem)</option>
+                              <option value="t4g.medium">t4g.medium(2vCPUs 4.0GiB Mem)</option>
+                              <option value="t4g.large">t4g.large(2vCPUs 8.0GiB Mem)</option>
+                              <option value="t4g.xlarge">t4g.xlarge(4vCPUs 16.0GiB Mem)</option>
+
+
                           </select>
                         </div>                    
                       </div>
@@ -136,18 +148,18 @@ useEffect(() => {
                         <div className="form-group the_form-group">
                           <label htmlFor="subnet">網段</label>
                           <select name="subnet" id="subnet" className="form-control" onChange={subnet_ChangeHandler} ref={subnet_default}>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="DMZ1">DMZ1</option>
-                            <option value="DMZ2">DMZ2</option>
+                            <option value="subnet-f20f8085">內部網段1(不可連外網)</option>
+                            <option value="subnet-3406a06d">內部網段2(不可連外網)</option>
+                            <option value="subnet-c30e81b4">內部網段1(可連外網)</option>
+                            <option value="subnet-e507a1bc">內部網段2(可連外網)</option>
+                            <option value="subnet-931d95e4">DMZ網段1(可連外網)</option>
+                            <option value="subnet-6a00a333">DMZ網段2(可連外網)</option>
                           </select>
                         </div>
                       </div>
                      
                        
-                      {(subnet === 'DMZ1' || subnet === 'DMZ2') &&
+                      {/* {(subnet === 'DMZ1' || subnet === 'DMZ2') &&
                       <div className="form-row the_form-row">
                         <div className="form-group col-md-4">
                           <div className="form-check">
@@ -161,7 +173,7 @@ useEffect(() => {
                     
 
                       </div>
-                    }  
+                      }   */}
                       <div className="button-group">
                                 <button type="submit" id="save" className="btn btn-primary">儲存</button>
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={cancel}>取消</button>

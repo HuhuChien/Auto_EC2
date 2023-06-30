@@ -1,9 +1,9 @@
 
-import React,{ useState, useEffect,useRef,useReducer } from 'react'
+import React,{ useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import {FaAws} from "react-icons/fa";
 import axios from 'axios';
-//import  { AES, enc } from "crypto-js";
+
 
 
 
@@ -14,7 +14,7 @@ const Login = ({setLog_in,setQuery4,setQuery5}) => {
     const [show_username,set_Show_username] = useState('')
     const [ad_info,set_Ad_info] = useState('')//給<App.js />使用，可傳給children component
     let navigate = useNavigate()
-    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    //const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
     useEffect(() => {
         setQuery4(show_username)
@@ -30,7 +30,8 @@ const Login = ({setLog_in,setQuery4,setQuery5}) => {
   
 
     //沒效果，要在處理
-    /*
+
+/*
     useEffect(() => {
         async function test(){
             const url = `http://localhost:5020/logout`
@@ -60,7 +61,7 @@ const handle_login = (async(e) => {
     try{
         axios.defaults.withCredentials = true;//一定要設定，因為client browser要接收cookie
         const result = await axios.post(url,{
-            username:username_ad,
+            username:username_ad + '@evertrust.com.tw',
             password:password_ad
         })
         let sAMAccountName = result.data.user.username.split('@')[0]  
@@ -72,8 +73,6 @@ const handle_login = (async(e) => {
         if(result.status === 200){
             try{
                 setLog_in(true)
-                //console.log(result2.data)
-                //set_Ad_info(AES.encrypt(JSON.stringify(result2.data),'abbbabadbadbbda').toString())
                 set_Ad_info(result2.data)
                 set_Show_username(result.data.user.username.split('@')[0].toUpperCase() + result2.data.displayName)
                 navigate('/create_ec2')
@@ -84,32 +83,59 @@ const handle_login = (async(e) => {
       
         } else {
             navigate('/login')
-            console.log('weird')
+         
         }
 
     }catch(error){
         console.log(error)
+        window.alert('帳號或密碼錯誤')
+
     }
     
-
-  
 })
 
-
-
-
-
   return <>
-        <form method="POST" onSubmit={handle_login}>
-                <div className="container">
-                    <label htmlFor="">Username</label>
-                    <input onChange={username_ChangeHandler} type="text" name="ad_username"/>
+     
+     <div className="limiter">
+		<div className="container-login100">
+			<div className="wrap-login100">
+				<form className="login100-form" method="POST" onSubmit={handle_login}>
+					<span className="login100-form-title p-b-26">
+						<div>AWS雲端主機</div>
+						<div>建立系統</div>		
+					</span>
 
-                    <label htmlFor="">Password</label>
-                    <input onChange={password_ChangeHandler} type="text" name="ad_password"/>
-                    <button type="submit">登入</button>
-                </div>
-        </form>
+					<div className="wrap-input100">
+                        <input onChange={username_ChangeHandler} className="input100" type="text" name="ad_username" placeholder='AD帳號 例如:A0001'/>   
+					</div>
+
+					<div className="wrap-input100">
+	                    <input onChange={password_ChangeHandler} className="input100" type="password" name="ad_password" placeholder='AD密碼'/>
+					</div>
+
+					<div className="container-login100-form-btn">
+						<div className="wrap-login100-form-btn">
+							<div className="login100-form-bgbtn"></div>
+							<button className="login100-form-btn">登入</button>
+						</div>
+					</div>
+                    {/* <div className="text-center p-t-115"> */}
+					<div className="text-center p-t-22">
+                             <FaAws className="aws_logo"/> 
+					</div>
+                   
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+        
+    
+	
+
+
     
   </>
 }

@@ -1,18 +1,42 @@
 [
       {
-        "ami-006e00d6ac75d2ebb": "Ubuntu 20.04 LTS",
-        "ami-007855ac798b5175e": "Ubuntu 22.04 LTS",
-        "ami-00c39f71452c08778": "Amazon Linux 2023",
-        "ami-0e515107fd2bcc7fe": "Windows Server 2019"
+        "ami-0e515107fd2bcc7fe": "Windows Server 2019",
+        "ami-06a46da680048c8ae": "CentOS 7",
+        "ami-0d52744d6551d851e": "Ubuntu 22.04 LTS"
+      
       },
       {
-        "t1.micro": "1vCPU 0.612GB Mem",
-        "t2.nano": "1vCPU 0.5GB Mem",
-        "t2.micro": "1vCPU 1GB Mem"
+        "t3.nano": "t3.nano(2vCPUs 0.5GiB Mem)",
+        "t3.micro": "t3.micro(2vCPUs 1.0GiB Mem)",
+        "t3.small": "t3.small(2vCPUs 2.0GiB Mem)",
+        "t3.medium": "t3.medium(2vCPUs 4.0GiB Mem)",
+        "t3.large": "t3.large(2vCPUs 8.0GiB Mem)",
+        "t3.xlarge": "t3.xlarge(4vCPUs 16.0GiB Mem)",
+
+
+        "t4g.nano": "t4g.nano(2vCPUs 0.5GiB Mem)",
+        "t4g.micro": "t4g.micro(2vCPUs 1.0GiB Mem)",
+        "t4g.small": "t3.small(2vCPUs 2.0GiB Mem)",
+        "t4g.medium": "t4g.medium(2vCPUs 4.0GiB Mem)",
+        "t4g.large": "t4g.large(2vCPUs 8.0GiB Mem)",
+        "t4g.xlarge": "t4g.xlarge(4vCPUs 16.0GiB Mem)"
+
+
+      },
+
+      {
+
+        "subnet-f20f8085":"內部網段1(不可連外網)",
+        "subnet-3406a06d":"內部網段2(不可連外網)",
+        "subnet-c30e81b4":"內部網段1(可連外網)",
+        "subnet-e507a1bc":"內部網段2(可連外網)",
+        "subnet-931d95e4":"DMZ網段1(可連外網)",
+        "subnet-6a00a333":"DMZ網段2(可連外網)"
       }
+
+
     
 ]
 
 
-
-
+          

@@ -20,10 +20,9 @@ const ApplyEC2 = ({query}) => {
 
 
   useEffect(() => {
-    secureLocalStorage.removeItem('all2')
-    secureLocalStorage.removeItem('demand2')
-    const data = JSON.parse(secureLocalStorage.getItem('all2'))
-    const demand = JSON.parse(secureLocalStorage.getItem('demand2'))
+  
+    const data = encryptStorage1.getItem('all2')
+    const demand = JSON.parse(sessionStorage.getItem('demand2'))
     
     if(data){
       setResponse(data)
@@ -41,8 +40,8 @@ const ApplyEC2 = ({query}) => {
 
   useEffect(() => {
    
-    secureLocalStorage.setItem('all2', JSON.stringify(response));
-    secureLocalStorage.setItem('demand2', JSON.stringify(demand_apply));
+    encryptStorage1.setItem('all2', JSON.stringify(response));
+    sessionStorage.setItem('demand2', JSON.stringify(demand_apply));
   }, [response,demand_apply]);
 
 const fetchData = async() => {

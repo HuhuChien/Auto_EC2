@@ -1,7 +1,12 @@
+
+
+
+
 /* Navgar和Search */
 .the_navbar{
-    margin-top: 1.5rem;
+    margin-top: 1.7rem;
     width:100%;
+   
 
 } 
 
@@ -9,9 +14,12 @@
 
 .search {
     position: absolute;
+
     top:45px;
-    right:30px;
+    right:55px;
+    
 }
+
 
 
 
@@ -42,7 +50,8 @@
     border:1px solid #e5e5e5;;
     margin-top:1rem;
     width:10rem;
-
+    /* border-radius: 0 5px 5px 0; */
+    transform: translate(-1px, -1px);
 }  
 
 /* 新建雲端主機-無資料 */
@@ -87,11 +96,26 @@
 
 .form-row{
     min-width: 230px;
+
+   
 } 
 
-input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami"],select[name="subnet"] {
-    width:200px;
-  }
+/* 表格文字大小 (新建雲端主機、後台管理)*/
+.the_form-group select, .form-group select{
+    font-size:14px;
+    height: 38px;
+}
+
+input[type="text"],input[type="number"]{
+    font-size:14px;
+    height: 38px;
+}
+
+
+
+.the_form-group,.form-group{
+    width:210px;
+}
 
 .gb{
    display: flex;
@@ -111,7 +135,7 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
 
 .add_disk{
     position: absolute;
-    right: 20px;
+    right: 0;
     border:none;
     background-color: #0e5c97;
     color:#fff;
@@ -121,7 +145,7 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
 
 .remove_disk{
     position: absolute;
-    right: 20px;
+    right: 0;
     border:none;
     background-color: #97950e;
     color:#fff;
@@ -147,6 +171,7 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
 .ghost{
     display: none;
 }
+
 
 
 
@@ -182,9 +207,10 @@ input[type="text"],input[type="number"],select[name="EC2_name"],select[name="ami
 /* table */
 
 
+
 table th,
 table td {
-  /* font-size:10px; */
+  font-size:14px;
   text-align: center;
 } 
 
@@ -200,12 +226,7 @@ table td {
 } 
 
 
-/*無法作用
-.the_newline::after{
-    content: "\a";
-    white-space: pre;
-}
-*/
+
 
 
 .storage{
@@ -278,15 +299,17 @@ table td {
     height: 54px;
     padding: 5px;
     outline: none; 
-
+    border-radius: 5px 0 0 5px;
+    
 }
 
 #demand_save{
-    height: 54px;
-    width: 94px;
+    height: 38px;
+    width: 80px;
+    transform: translateY(0px);
     background-color: #F05220;
     color: #ffffff;
-
+   
     border-style: none;
 
     cursor: pointer;
@@ -296,8 +319,9 @@ table td {
 
 /* 後台管理 */
 #demand_save_backend{
-    height: 54px;
-    width: 94px;
+    height: 38px;
+    width: 80px;
+    transform: translateY(0px);
     background-color: black;
     color: #ffffff;
     border-style: none;
@@ -316,6 +340,19 @@ table td {
 }
 
 
+
+.username{
+    border-bottom: 2px solid rgb(255, 0, 43);
+    transform: translateY(1px);
+}
+
+
+
+.setting{
+    transform: translate(10px,2px);
+}
+
+
 .dropdown-item-logout {
     width: 50px;
     font-size:14px;
@@ -323,6 +360,15 @@ table td {
     padding: 0;
 
   }
+
+/* Login Page */
+
+
+/* .input100[type="text"],.input100[type="password"]{
+    font-size: 14px;
+} */
+
+
 
 
   /* Footer */
@@ -350,10 +396,10 @@ table td {
 
 
 /* RWD */
-@media screen and (min-width:766px) and (max-width:995px){ 
+@media screen and (min-width:768px) and (max-width:995px){ 
     .search{
         top:45px;
-        right:30px;
+        right:55px;
       
     }
    
@@ -367,25 +413,31 @@ table td {
    
   }
 
-  @media screen and (max-width:766px){ 
+  @media screen and (max-width:768px){ 
     .search{
 
-        top:33px;
-        right:30px;
-   
-        
+        top:35px;
+        right:65px;
+  
+       
     }
-
-
-
-
-
-
-
 
 
   }  
 
+
+
+
+@media screen and (max-width:992px){ 
+    .the-modal-content{
+
+        width:140%;
+        
+        transform: translateX(-100px);
+       
+    }  
+  
+}
 
 /* input的數字不要有箭頭->Chrome, Safari, Edge, Opera */ 
 input::-webkit-outer-spin-button,

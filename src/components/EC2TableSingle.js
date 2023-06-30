@@ -2,16 +2,19 @@ import React,{useEffect,useState} from 'react'
 import { OverlayTrigger,Popover } from 'react-bootstrap';
 
 import data from './adjust_format.json'
-import { AiFillCheckSquare  } from "react-icons/ai";
-import {MdOutlineDangerous} from "react-icons/md";
 import {FiMoreVertical} from "react-icons/fi";
 import {GrStorage} from "react-icons/gr";
 import {encryptStorage1} from '../App'
-//import $ from 'jquery'; 
+
+
+
+
 const EC2TableSingle = ({ID,number,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY_DATE,SUBNET,IP,deleteEC2,editEC2,counter,cancelstorage,theIndex}) => {
   const [old_the_counter,setOldTheCounter] = useState('')
+  
   let new_OS = data[0][OS]
   let new_RESOURCE= data[1][RESOURCE]
+  let new_SUBNET= data[2][SUBNET]
   let the_counter = COUNTER.map((item,index) => {
     return <div key={index}>硬碟{index+2}:{item.EC2_disk}GB</div>
   })
@@ -48,12 +51,6 @@ const EC2TableSingle = ({ID,number,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY
 
 
 
-  
-
-  
-    
- 
-
     return <>
           <tr>
               <td>{DEMAND}</td>
@@ -73,11 +70,8 @@ const EC2TableSingle = ({ID,number,DEMAND,EC2NAME,OS,RESOURCE,DISK,COUNTER,APPLY
                 
           
               </td>
-              <td>{SUBNET}</td>
-              {IP === true ? 
-              <td><AiFillCheckSquare className='ip_svg'/></td>
-              :<td><MdOutlineDangerous className='ip_svg'/></td>
-            }
+              <td>{new_SUBNET}</td>
+         
              <td className="nav-item dropdown">
                     <a className="" href="#/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <FiMoreVertical />

@@ -18,7 +18,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
       <div className="modal fade form_modal" data-keyboard="false" data-backdrop="static" id="form_modal_edit" tabIndex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
  
         <div className="modal-dialog modal-lg">
-          <div className="modal-content the-modal-content">
+          <div className="modal-content">
           <button data-dismiss="modal" className="close" type="button" onClick={() => cancel()}>
               <span aria-hidden="true">×</span>
           </button>
@@ -69,10 +69,10 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                       <div className="form-row">
                         <div className="form-group">
                           <label htmlFor="ami">主機作業系統</label>
-                          <select name="ami" id="ami" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
-                            <option value="ami-0e515107fd2bcc7fe">Windows Server 2019</option>
-                            <option value="ami-0d52744d6551d851e">Ubuntu 22.04 LTS</option>
-                            <option value="ami-06a46da680048c8ae">CentOS 7</option>
+                          <select name="ami" id="instance_type" className="form-control" onChange={os_ChangeHandler} ref={os_default}>
+                            <option value="ami-006e00d6ac75d2ebb">Ubuntu 20.04 LTS</option>
+                            <option value="ami-007855ac798b5175e">Ubuntu 22.04 LTS</option>
+                            <option value="ami-00c39f71452c08778">Amazon Linux 2023 </option>
                           </select>
                         </div>
                       
@@ -81,19 +81,9 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                         <div className="form-group">
                           <label htmlFor="instance_type">主機規格</label>
                           <select name="subnet" id="instance_type" className="form-control" onChange={instance_type_ChangeHandler} ref={resource_default}>
-                              <option value="t3.nano">t3.nano(2vCPUs 0.5GiB Mem)</option>
-                              <option value="t3.micro">t3.micro(2vCPUs 1.0GiB Mem)</option>
-                              <option value="t3.small">t3.small(2vCPUs 2.0GiB Mem)</option>
-                              <option value="t3.medium">t3.medium(2vCPUs 4.0GiB Mem)</option>
-                              <option value="t3.large">t3.large(2vCPUs 8.0GiB Mem)</option>
-                              <option value="t3.xlarge">t3.xlarge(4vCPUs 16.0GiB Mem)</option>
-
-                              <option value="t4g.nano">t4g.nano(2vCPUs 0.5GiB Mem)</option>
-                              <option value="t4g.micro">t4g.micro(2vCPUs 1.0GiB Mem)</option>
-                              <option value="t4g.small">t4g.small(2vCPUs 2.0GiB Mem)</option>
-                              <option value="t4g.medium">t4g.medium(2vCPUs 4.0GiB Mem)</option>
-                              <option value="t4g.large">t4g.large(2vCPUs 8.0GiB Mem)</option>
-                              <option value="t4g.xlarge">t4g.xlarge(4vCPUs 16.0GiB Mem)</option>
+                              <option value="t1.micro">1vCPU 0.612GB Mem</option>
+                              <option value="t2.nano">1vCPU 0.5GB Mem</option>
+                              <option value="t2.micro">1vCPU 1GB Mem</option>
                           </select>
                         </div>
                     
@@ -118,75 +108,70 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                         return <div className='form-row the-form-row' key={index}>
                             <div className="form-group the_form-group dynamic_disk" >  
                                     <button onClick={(e) => handle_Remove_Disk2(e,index)} className="remove_disk">移除硬碟</button>
-                                    <label>主機硬碟</label>
+                                    <label>主機硬碟{index + 2}</label>
                                     <div className='d-flex'>
-                                        <input type="number" name="EC2_disk" ref={(element) => dynamic_default.current[index] = element} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`} min="8"></input>
+                                        <input type="number" name="EC2_disk" ref={(element) => dynamic_default.current[index] = element} onChange={(e) => handleChange(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
                                         <div className='gb'>GB</div>      
                                     </div>               
                             </div> 
                        </div>
                       })}
 
-
-                      {
-                      counter2.map((c, index) => {
-                          let start_point = receiveData.allEC2[theIndex].COUNTER.length + 2
-                          console.log(start_point)
-
-                          return <div className='form-row the-form-row' key={index}>
-
+                       {
                         
-                            <div className="form-group the_form-group dynamic_disk" >  
-                            <button onClick={(e) => handle_Remove_Disk3(e,index)} className="remove_disk">移除硬碟</button>
-                                    <label>主機硬碟</label>
-                                    <div className='d-flex'>
-                                        <input type="number" name="EC2_disk" value={c.EC2_disk || ''} onChange={(e) => handleChange2(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic" min="8"></input>
-                                        <div className='gb'>GB</div> 
-                                    </div>               
-                            </div> 
-                          </div>
-                        }
-                    )}    
-                    
+                          counter2.map((c, index) => {
+                            let start_point = receiveData.allEC2[theIndex].COUNTER.length + 2
+                            console.log(start_point)
 
+                            return <div className='form-row the-form-row' key={index}>
+
+                          
+                              <div className="form-group the_form-group dynamic_disk" >  
+                              <button onClick={(e) => handle_Remove_Disk3(e,index)} className="remove_disk">移除硬碟</button>
+                                      <label>主機硬碟{index + counter.length + 2}</label>
+                                      <div className='d-flex'>
+                                          <input type="number" name="EC2_disk" value={c.EC2_disk || ''} onChange={(e) => handleChange2(e,index)} placeholder="請輸入硬碟容量"  className="form-control EC2_disk_dynamic"  id={`dynamic${index}`}></input>
+                                          <div className='gb'>GB</div> 
+                                      </div>               
+                              </div> 
+                            </div>
+                          }
+                      )}    
+                    
 
                       <div className="form-row">
                         <div className="form-group">
                           <label htmlFor="subnet">網段</label>
                           <select name="subnet" id="subnet" className="form-control" onChange={subnet_ChangeHandler} ref={subnet_default}>
-                            <option value="subnet-f20f8085">內部網段1(不可連外網)</option>
-                            <option value="subnet-3406a06d">內部網段2(不可連外網)</option>
-                            <option value="subnet-c30e81b4">內部網段1(可連外網)</option>
-                            <option value="subnet-e507a1bc">內部網段2(可連外網)</option>
-                            <option value="subnet-931d95e4">DMZ網段1(可連外網)</option>
-                            <option value="subnet-6a00a333">DMZ網段2(可連外網)</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="DMZ1">DMZ1</option>
+                            <option value="DMZ2">DMZ2</option>
                           </select>
-                        </div>
-                   
-          
+                        </div> 
                       </div>
                      
                 
                       {(subnet === 'DMZ1' ||  subnet === 'DMZ2') &&
                       <div className="form-row">
                         <div className="form-group">
-                          <div className="form-check">
-                              
+                          <div className="form-check">              
                                 <label className="form-check-label" htmlFor="exampleCheck1">對外IP</label>
                                 <input type="checkbox" className="form-check-input" id="exampleCheck1" onChange={ip_ChangeHandler} ref={check_default} />
                           </div>
                         </div>
-
                       </div>
                       }
                       
-                      
-                      
+
                       <div className="button-group">
                         <button type="submit" id="save" className="btn btn-primary">更新</button>
                         <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancel()}>取消</button>
-                      </div> 
+                      </div>
               </form>
+       
           </div>
         </div>
       </div>

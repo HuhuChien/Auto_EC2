@@ -14,7 +14,7 @@ const ApplyEC2TableList = ({tem_demand}) => {
   console.log(receiveData)
 
 
-
+  
   try{
   demand_obj = JSON.parse(tem_demand);
 
@@ -26,11 +26,10 @@ const ApplyEC2TableList = ({tem_demand}) => {
 
   return <>
 
-   
-
+  
             {receiveData.length > 0 &&
                 <table className="table create">
-                  <thead className="">
+                  <thead>
                     <tr>
                       <th scope="col">需求單單號</th>
                       <th scope="col">申請人</th>
@@ -40,18 +39,16 @@ const ApplyEC2TableList = ({tem_demand}) => {
                       <th scope="col">主機規格</th>
                       <th scope="col">主機硬碟</th>
                       <th scope="col">網段</th>
-                      <th scope="col">對外IP</th>
                     </tr>
                   </thead>
                   <tbody>
 
                         {receiveData.map((ec2,index) => {
-                              console.log(ec2)
+                              // console.log(ec2)
                               return <ApplyEC2TableSingle key={ec2._id} {...ec2}/>
-                          
+                        
+                              
                         })
-
-
                         }
 
                   </tbody>
