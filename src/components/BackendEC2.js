@@ -362,12 +362,12 @@ console.log(index_of_List)
   setOS(edit_EC2.ami)
   setResource(edit_EC2.instance_type)
   setSubnet(edit_EC2.subnet)
-  setIp(edit_EC2.ip) 
+  setIp(edit_EC2.elastic_ip) 
 
 
 
   if (subnet_default.current.value === 'subnet-931d95e4' || subnet_default.current.value === 'subnet-6a00a333'){
-    check_default.current.checked = edit_EC2.ip
+    check_default.current.checked = edit_EC2.elastic_ip
   
    } 
 
@@ -391,7 +391,7 @@ const handle_Update_DB = async() => {
       subnet:subnet,
       disk1:disk,
       extra_disks:[...counter,...counter2],
-      ip:ip,
+      elastic_ip:ip,
     }
 
 
@@ -571,7 +571,7 @@ const handle_Update_DB = async() => {
          
       
           })
-          window.location.reload(false);
+          //window.location.reload(false);
       
           }
 

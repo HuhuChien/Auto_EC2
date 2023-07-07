@@ -4,7 +4,7 @@ import {encryptStorage1} from '../App'
 // import EditCounter from './EditCounter_'
 
 const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_default,disk_default,dynamic_default,resource_default,subnet_default,check_default,demand_ChangeHandler,os_ChangeHandler,disk_ChangeHandler,instance_type_ChangeHandler,handle_Update,cancel,ec2_Name_ChangeHandler,ip_ChangeHandler,subnet_ChangeHandler,ip,subnet
-  ,counter,counter2,handle_Add_Disk,handle_Add_Disk2,handle_Remove_Disk,handle_Remove_Disk2,handle_Remove_Disk3,handleChange,handleChange2,ghost}) => {
+  ,counter,counter2,handle_Add_Disk2,handle_Remove_Disk,handle_Remove_Disk2,handle_Remove_Disk3,handleChange,handleChange2,ghost}) => {
     const receiveData = useContext(EC2Context)
     console.log(receiveData)
     console.log(counter)
@@ -115,7 +115,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                      {  
                       
                       receiveData.allEC2[theIndex].COUNTER.map((c, index) => {
-                        return <div className='form-row the-form-row' key={index}>
+                        return <div className='form-row the_form-row' key={index}>
                             <div className="form-group the_form-group dynamic_disk" >  
                                     <button onClick={(e) => handle_Remove_Disk2(e,index)} className="remove_disk">移除硬碟</button>
                                     <label>主機硬碟</label>
@@ -133,7 +133,7 @@ const EditEC2Form = ({theId,theIndex,demand_default,server_name_default,os_defau
                           let start_point = receiveData.allEC2[theIndex].COUNTER.length + 2
                           console.log(start_point)
 
-                          return <div className='form-row the-form-row' key={index}>
+                          return <div className='form-row the_form-row' key={index}>
 
                         
                             <div className="form-group the_form-group dynamic_disk" >  

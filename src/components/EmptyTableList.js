@@ -13,11 +13,10 @@ const EmptyTableList = () => {
               <th scope="col">主機規格</th>
               <th scope="col">主機硬碟</th>
               <th scope="col">網段</th>
-    
               <th scope="col">進階</th>
             </tr>
           </thead>
-          <tbody className=''>
+          <tbody>
             <tr>
                 <td className='no-data'>無資料</td>
             </tr>

@@ -3,12 +3,12 @@ import { BackendEC2Context } from './BackendEC2'
 
 import BackendEC2TableSingle from './BackendEC2TableSingle';
 
-const BackendEC2TableList = ({demand_apply,alert,tem_demand,deleteEC2,editEC2,response}) => {
+const BackendEC2TableList = ({alert,tem_demand,deleteEC2,editEC2}) => {
 
 
   const receiveData = useContext(BackendEC2Context)
   let demand_obj
-  //console.log(receiveData)
+ 
 
 
 

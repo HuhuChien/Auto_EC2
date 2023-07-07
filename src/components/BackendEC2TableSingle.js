@@ -8,9 +8,9 @@ import {GrStorage} from "react-icons/gr";
 import {FiMoreVertical} from "react-icons/fi";
 import {encryptStorage1} from '../App'
 const BackendEC2TableSingle = ({_id,demand,server_name,ami,disk1,extra_disks
-  ,instance_type,APPLY_DATE,subnet,ip,deleteEC2,editEC2}) => {
+  ,instance_type,subnet,elastic_ip,deleteEC2,editEC2}) => {
    
-
+    console.log(elastic_ip)
     
     let new_OS = data[0][ami]
     let new_RESOURCE= data[1][instance_type]
@@ -51,7 +51,7 @@ const BackendEC2TableSingle = ({_id,demand,server_name,ami,disk1,extra_disks
                 </OverlayTrigger>
              </td>
              <td>{new_SUBNET}</td>
-             {ip === true ? 
+             {elastic_ip === true ? 
               <td><AiFillCheckSquare /></td>
               :<td><MdOutlineDangerous /></td>
               }

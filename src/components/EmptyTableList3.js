@@ -31,7 +31,7 @@ const EmptyTableList3 = ({demand_apply,alert,tem_demand}) => {
               <th scope="col">進階</th>
             </tr>
           </thead>
-          <tbody className=''>
+          <tbody>
             <tr>
                 <td className='no-data'>無資料</td>
             </tr>
@@ -45,7 +45,6 @@ const EmptyTableList3 = ({demand_apply,alert,tem_demand}) => {
                    <div className="modal-content the-modal-content">
                      <div className="modal-header ">
                        <h5 className="modal-title" id="backend_title">提示</h5>
-                     
                      </div>
                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>

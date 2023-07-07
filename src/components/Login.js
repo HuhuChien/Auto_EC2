@@ -68,8 +68,6 @@ const handle_login = (async(e) => {
         const url2 = `http://localhost:5020/auth/AD/${sAMAccountName}` 
        
         const result2 = await axios.get(url2)
-        console.log(result)
-        console.log(result2.data)
         if(result.status === 200){
             try{
                 setLog_in(true)

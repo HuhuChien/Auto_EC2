@@ -121,7 +121,7 @@ const EC2TableList = ({deleteEC2,editEC2,setQuery2,triggerNext,triggerPrevious,c
         <tbody>
 
               {records.map((ec2,index) => {
-                    console.log(ec2)
+                    //console.log(ec2)
                     return <EC2TableSingle key={ec2.ID} {...ec2} number={index} deleteEC2={deleteEC2} editEC2={editEC2} counter={counter} cancelstorage={cancelstorage} theIndex={theIndex}/>
                          
               })}

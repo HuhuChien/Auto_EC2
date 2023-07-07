@@ -807,11 +807,10 @@ const handle_Submit_DB =async(e) => {
               })
               .catch((error) => {
                 console.log(error)
-                //setUploading(false)
+                setUploading(false)
                 window.alert(error.response.data.error)
-             
+     
               }) 
-          
           })
              
          

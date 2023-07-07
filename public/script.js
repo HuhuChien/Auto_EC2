@@ -20,7 +20,7 @@
 
 
 
-console.log('apple')
+
 
   $('#EC2_disk').on("keypress",function (evt) {
     console.log(evt)
