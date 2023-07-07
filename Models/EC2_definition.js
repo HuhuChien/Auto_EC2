@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');
 
 
 
@@ -60,36 +59,24 @@ var Terraform_data_Schemma = new mongoose.Schema({
         required:[true,'must provide subnet'],
      
     },
-    ip: {
+    elastic_ip: {
         type:Boolean,
         required:[false,'not necessary'],
         default: false
-    },
-    created_date: {
-        type: String,
-        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
-    },
-    
-    updated_date: {
-        type: String, 
-        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
-    },
+    }
 
 
+},{
+    timestamps: true,
+    timestamps: { currentTime: () => Math.floor(Date.now() + 8*60*60*1000) }
 })
+
+
 
 
 
 module.exports = mongoose.model('Terraform_data',Terraform_data_Schemma)
 
-
-/*
-Terraform_data_Schemma.pre('save', function() {
-    //this.updated_date = moment.tz(Date.now(), "Asia/Taipei").format()
-    this.updated_date = 'sdfs'
-    next()
-  });
-*/
 
 
 

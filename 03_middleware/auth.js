@@ -8,8 +8,12 @@ exports.authenticatedToken = async(req,res,next) => {
     //console.log(req.headers)
 
     const authHeader = req.headers.cookie
+    console.log('ban')
+    console.log(authHeader)
+    console.log(req.headers)
+    //const token = authHeader && authHeader.split('; ')[4].split('=')[1]
     const token = authHeader && authHeader.split('=')[1]
-    //console.log(token)
+    console.log(token)
     if(token == null){
         return res.status(403).json("There is no token in client's browser")
     }

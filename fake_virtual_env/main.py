@@ -1,5 +1,6 @@
 from pymongo import MongoClient
-import json
+import json,sys
+
 # import hcl2
 
 
@@ -9,7 +10,7 @@ try:
     client = MongoClient(uri)
     print(client)
     db = client['Create_EC2'] #資料庫名稱
-    print('connected Create_EC2')
+    print('connected MongoDB_Create_EC2')
 
 except Exception:
 
@@ -19,10 +20,9 @@ except Exception:
 
 
 def get_Data_from_mongo():
-    # global server_name,ami,instance_type,disk1,extra_disks,subnet
     result = []
-    #此處要依據需求重寫
-    the_datas = db.terraform_datas.find({'demand': '123'})
+    #目標:在Jenkins頁面輸入需求單單號後，單號會寫入此main.py檔案
+    the_datas = db.terraform_datas.find({'demand': sys.argv[1]})
     print(the_datas)
     for item in the_datas:
         server_name = item['server_name']
@@ -46,7 +46,7 @@ def get_Data_from_mongo():
 
     with open("EC2_variable.tfvars.json", "w") as file_out:
         file_out.write(json.dumps(result, indent=4))
-        # print(f'{server_name},{ami},{instance_type},{subnet}')
+
     
 
 

@@ -23,8 +23,7 @@ exports.auth_login = (req,res,next) => {
               //登入成功才會產生token
               //方法1，token沒有設定到期日，但res.cookie也可以設定cookie到期時間
               const token = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
-              console.log('apple')
-              console.log(token)
+             
               res.cookie('token',token,{ 
                 maxAge: 24 *60 * 60 * 1000, //token會在24小時候到期
                 httpOnly: true, //標記此cookie只能從web server　訪問，以避免不正確的進入來取得竄改。
@@ -85,58 +84,45 @@ exports.user_logout = (req,res,next) => {
   
 }
 
-//POST
-//檢查主機名稱是否已在資料庫
-exports.check_name_in_DB = async(req,res,next) => {
 
-  
-    let matched_servers = []
-     const result = await Terraform_data.find({ 
-        server_name:req.body.server_name
-    });
-
-   
-    if(result.length > 0){
-        matched_servers.push(result[0].server_name)
-        res.status(400).json({error:matched_servers + '主機名稱已使用'})
-    } else {
-        res.status(200)
-    }
-
-    
-    /*
-    if(result.length === 0){
-        console.log('yes')
-    } else {
-        matched_servers.push(result[0].server_name)
-        res.status(400).json({error:matched_servers + '主機名稱已使用'})
-    }
-    */
-
-
-
-    
-   
-   
-   
-
-}
 
 //POST
 //新建雲端主機-送出按鈕
 exports.create_ec2_DB = async(req,res,next) => {
     try {
-        const Terraform = await Terraform_data.create(req.body)
-        await Terraform.save()
-        await res.status(201).json({Terraform})
-        
+     
+        const result = await Terraform_data.findOne({
+            server_name:req.body.server_name
+        })
+        if(result === null){
+            const Terraform = await Terraform_data.create(req.body)
+            await Terraform.save()
+            await res.status(201).json({Terraform})
+            
+        } else {
+            res.status(400).json({error:result.server_name + '主機名稱已使用'})
+        }
     }catch(error){
         res.status(400).json({error:error})
     }
 }
 
 
+exports.check_name_in_DB = async(req,res,next) => {
+    console.log(req.body.server_name)
+    try{
+    let servers_result = []
+     const result = await Terraform_data.find({ 
+        server_name:req.body.server_name
+    });
+     console.log(result)
+    }catch(error){
+   
+        res.status(400).json({error:error})
+    }
+   
 
+}
 
 
 

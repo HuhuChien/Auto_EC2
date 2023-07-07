@@ -6,12 +6,12 @@ const moment = require('moment-timezone');
 
 var Terraform_data_Schemma = new mongoose.Schema({
     
-    
+
     ad_displayname: {
         type:String,
         required:[true,'must provide AD_displayName'],
         default: "NULL"
-     
+
     },
     
     ad_samaccountname: {
@@ -38,7 +38,6 @@ var Terraform_data_Schemma = new mongoose.Schema({
      
     },
 
-
     ami: {
         type:String,
         required:[true,'must provide ami'],
@@ -47,7 +46,7 @@ var Terraform_data_Schemma = new mongoose.Schema({
     instance_type: {
         type:String,
         required:[true,'must provide instance_type'],
-     
+                
     },
     disk1:{
         type:String,
@@ -67,30 +66,33 @@ var Terraform_data_Schemma = new mongoose.Schema({
         default: false
     },
     created_date: {
-        type: String,
-        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
+        type: Date,
+        default: () => moment.tz(Date.now() + 8*60*60*1000, "Asia/Taipei").format()
     },
-   
+    
     updated_date: {
-        type: String, 
-        default: () => moment.tz(Date.now(), "Asia/Taipei").format()
+        type: Date, 
+        default: () => moment.tz(Date.now()  + 8*60*60*1000, "Asia/Taipei").format()
     },
 
 
+},{
+    timestamps: true,
+    timestamps: { currentTime: () => Math.floor(Date.now() + 8*60*60*1000) }
 })
+
+
+Terraform_data_Schemma.pre('save', function(next) {
+    this.updated_date = Math.floor(Date.now() + 8*60*60*1000)
+    next();
+  });
+
+
 
 
 
 module.exports = mongoose.model('Terraform_data',Terraform_data_Schemma)
 
-
-/*
-Terraform_data_Schemma.pre('save', function() {
-    //this.updated_date = moment.tz(Date.now(), "Asia/Taipei").format()
-    this.updated_date = 'sdfs'
-    next()
-  });
-*/
 
 
 

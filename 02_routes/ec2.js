@@ -6,8 +6,8 @@ const router = express.Router()
 router.post('/auth/login',auth_login)
 router.get('/auth/AD/:sAMAccountName',get_user_ADinfo)
 router.get('/logout',user_logout)
-router.get('/check_name',check_name_in_DB)  //目前沒用到
 router.post('/task',authenticatedToken,create_ec2_DB) //token到期後，無法再繼續執行
+router.post('/check_name',check_name_in_DB)  //前端目前沒用到
 router.post('/demand',demand_apply)
 router.get('/demand/:demand_apply',demand_apply2)//前端目前沒用到
 router.put('/update_ec2/:id',authenticatedToken,update_ec2_backend) //token到期後，無法再繼續執行

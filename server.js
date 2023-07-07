@@ -30,13 +30,11 @@ app.use(ec2);
 
 const connectDB = async() => {
     try {
-    
         await mongoose.connect('mongodb://localhost:27017/Create_EC2')
         await console.log('database is connected successfully');
         await app.listen(port, () => console.log(`server is runningg on port ${port}`));
-
     } catch(error) {
-        await console.log('failedddddddddddddddddddd')
+        await console.log('failed')
         await console.log(error)
     }
 }
